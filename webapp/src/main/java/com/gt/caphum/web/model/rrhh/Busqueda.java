@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,6 +20,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.gt.caphum.web.model.usuarios.Usuario;
 import com.gt.toolbox.spb.webapps.commons.infra.model.IWithIntegerId;
 import com.gt.toolbox.spb.webapps.commons.infra.model.IWithObservaciones;
 
@@ -41,18 +44,21 @@ public class Busqueda implements IWithIntegerId, IWithObservaciones {
 
     @ManyToOne
     private Puesto puesto;
-
+    
     @Temporal(TemporalType.DATE)
     private Date fechaCreacion;
-
+    
     @Temporal(TemporalType.DATE)
     private Date inicio;
-
+    
     @Temporal(TemporalType.DATE)
     private Date finalizacion;
-
+    
     @Enumerated(EnumType.STRING)
     EstadoBusqueda estado;
+    
+    @ManyToOne
+    Usuario interesado;
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
@@ -61,6 +67,7 @@ public class Busqueda implements IWithIntegerId, IWithObservaciones {
     private List<Evaluacion> evaluaciones;
 
     @Column(length = 10000)
+    @Basic(fetch = FetchType.LAZY)
     String observaciones;
 
     @ToString.Exclude

@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,6 +23,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+@Entity
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
@@ -49,6 +51,7 @@ public class Documento extends CodigoNombre implements IWithIntegerId, IWithObse
     Date fechaEliminacion;
 
     @Column(length = 10000)
+    @Basic(fetch = FetchType.LAZY)
     String observaciones;
 
     @Lob

@@ -1,12 +1,15 @@
 package com.gt.caphum.web.model.rrhh;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.ManyToOne;
@@ -46,6 +49,7 @@ public class Evaluacion implements IWithIntegerId, IWithObservaciones, Serializa
     private Persona persona;
 
     @Column(length = 10000)
+    @Basic(fetch = FetchType.LAZY)
     String observaciones;
 
     @ToString.Exclude

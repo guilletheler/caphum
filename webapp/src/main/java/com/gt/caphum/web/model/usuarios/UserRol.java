@@ -21,6 +21,8 @@ import lombok.Getter;
  */
 public enum UserRol {
     SYSADMIN("ADMINISTRADOR DE SISTEMAS", "ABM usuarios, ABM parámetros de sistema", "", "/pages/sistema/**"),
+    RRHH("R.R.H.H.", "", "SYSADMIN", "/pages/rrhh/**"),
+    INTERESADO("INTERESADO", "", "SYSADMIN", "/pages/interesado/**"),
     USUARIO("CAMBIO DE CONTRASEÑA", "", "SYSADMIN", "/pages/usuario/**"),
     WEBSERVICES("WEBSERVICES", "", "SYSADMIN", "/ws/**"),
     AYUDA("AYUDA", "Muestra la ayuda del sistema", "SYSADMIN", "/pages/ayuda/**");

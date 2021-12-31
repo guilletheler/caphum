@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions" xmlns:adm="http://github.com/adminfaces"
+	template="#{layoutMB.template}">
+
+	<ui:define name="title">
+		Edición de Documento
+	</ui:define>
+
+	<ui:define name="body">
+		<f:metadata>
+			<f:viewParam name="id" value="#{documentoEditController.id}" converter="javax.faces.Long" />
+			<!-- use view action if you are in a Java EE 7 server: <f:viewAction action="#{documentoEditController.init()}"/>-->
+			<f:event type="preRenderView" listener="#{documentoEditController.init}" />
+		</f:metadata>
+
+		<adm:breadcrumb
+			title="#{(documentoEditController.id == null) ? 'Nuevo Documento' : 'Documento '.concat(documentoEditController.id)}"
+			link="DocumentoEdit.xhtml?id=#{documentoEditController.id}" />
+		<h:form id="form" prependId="false">
+			<p:focus rendered="#{documentoEditController.id == null}" />
+
+			<p:panel class="box box-solid box-primary" header="CREANDO/EDITANDO UN DOCUMENTO"
+				style="width: 100%; height: 100%">
+
+				<div class="ui-g ui-fluid">
+					<ui:fragment rendered="#{sessionMB.inRole('SYSADMIN')}">
+						<div class="ui-g-12 ui-md-2">
+							<div class="ui-sm-12 ui-g-12">
+								<p:outputLabel value="ID" />
+							</div>
+							<div class="ui-sm-12 ui-g-12">
+								<p:outputLabel value="#{item.id}" />
+							</div>
+						</div>
+					</ui:fragment>
+					<div class="ui-g-12 ui-md-2">
+						<div class="ui-sm-12 ui-g-12">
+							<p:outputLabel for="codigo" value="CODIGO" />
+						</div>
+						<div class="ui-sm-12 ui-g-12">
+							<p:inputNumber id="codigo" value="#{documentoEditController.documento.codigo}"
+								thousandSeparator="" decimalPlaces="0" />
+							<p:tooltip for="codigo" value="Valor de codigo" position="top" />
+						</div>
+					</div>
+					<div class="ui-g-12 ui-md-8">
+						<div class="ui-sm-12 ui-g-12">
+							<p:outputLabel for="nombre" value="NOMBRE" />
+						</div>
+						<div class="ui-sm-12 ui-g-12">
+							<p:inputText id="nombre" value="#{documentoEditController.documento.nombre}" />
+							<p:tooltip for="nombre" value="Valor de nombre" position="top" />
+						</div>
+					</div>
+					<div class="ui-g-12 ui-md-6">
+						<div class="ui-sm-12 ui-g-12">
+							<p:outputLabel for="fileName" value="FILENAME" />
+						</div>
+						<div class="ui-sm-12 ui-g-12">
+							<p:inputText id="fileName" value="#{documentoEditController.documento.fileName}" />
+							<p:tooltip for="fileName" value="Valor de fileName" position="top" />
+						</div>
+					</div>
+					<div class="ui-g-12 ui-md-2">
+						<div class="ui-sm-12 ui-g-12">
+							<p:outputLabel for="fechaCreacion" value="FECHACREACION" />
+						</div>
+						<div class="ui-sm-12 ui-g-12">
+							<p:calendar id="fechaCreacion" value="#{documentoEditController.documento.fechaCreacion}"
+								locale="es" navigator="true" pattern="dd/MM/yyyy" showOn="button">
+							</p:calendar>
+
+							<p:tooltip for="fechaCreacion" value="Valor de fechaCreacion" position="top" />
+						</div>
+					</div>
+					<div class="ui-g-12 ui-md-2">
+						<div class="ui-sm-12 ui-g-12">
+							<p:outputLabel for="fechaVencimiento" value="FECHAVENCIMIENTO" />
+						</div>
+						<div class="ui-sm-12 ui-g-12">
+							<p:calendar id="fechaVencimiento"
+								value="#{documentoEditController.documento.fechaVencimiento}" locale="es"
+								navigator="true" pattern="dd/MM/yyyy" showOn="button">
+							</p:calendar>
+
+							<p:tooltip for="fechaVencimiento" value="Valor de fechaVencimiento" position="top" />
+						</div>
+					</div>
+					<div class="ui-g-12 ui-md-2">
+						<div class="ui-sm-12 ui-g-12">
+							<p:outputLabel for="fechaEliminacion" value="FECHAELIMINACION" />
+						</div>
+						<div class="ui-sm-12 ui-g-12">
+							<p:calendar id="fechaEliminacion"
+								value="#{documentoEditController.documento.fechaEliminacion}" locale="es"
+								navigator="true" pattern="dd/MM/yyyy" showOn="button">
+							</p:calendar>
+
+							<p:tooltip for="fechaEliminacion" value="Valor de fechaEliminacion" position="top" />
+						</div>
+					</div>
+					<div class="ui-g-12 ui-md-12">
+						<div class="ui-sm-12 ui-g-12">
+							<p:outputLabel for="observaciones" value="OBSERVACIONES" />
+						</div>
+						<div class="ui-sm-12 ui-g-12">
+							<p:inputTextarea id="observaciones" rows="3" cols="20"
+								value="#{documentoEditController.documento.observaciones}" autoResize="true" />
+						</div>
+					</div>
+
+
+					<div class="ui-g-12 ui-md-4">
+						<div class="ui-sm-12 ui-g-12">
+							<p:outputLabel value="CONTENIDO" />
+						</div>
+						<div class="ui-sm-12 ui-g-12">
+						</div>
+					</div>
+
+
+
+				</div>
+
+				<p:commandButton action="#{documentoEditController.save}" value="Guardar" update="@form"
+					styleClass="btn btn-success" />
+				<p:commandButton value="Volver" action="DocumentosList?faces-redirect=true" styleClass="btn btn-danger"
+					process="@this" immediate="true">
+					<p:confirm header="Descartar cambios" message="¿Está seguro de descartar los cambios?"
+						icon="ui-icon-alert" />
+				</p:commandButton>
+
+			</p:panel>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger box-solid">
+				<p:commandButton value="Si" type="button" styleClass="btn-material btn-primary ui-confirmdialog-yes"
+					icon="fa fa-check" />
+				<p:commandButton value="No" type="button" styleClass="btn-material btn-danger ui-confirmdialog-no"
+					icon="fa fa-close" />
+			</p:confirmDialog>
+		</h:form>
+	</ui:define>
+</ui:composition>
