@@ -21,7 +21,7 @@ import javax.validation.ValidationException;
 import org.omnifaces.util.Faces;
 
 import com.github.adminfaces.template.exception.AccessDeniedException;
-import com.gt.caphum.web.dto.ClaveValorDto;
+import com.gt.toolbox.spb.webapps.commons.infra.dto.ClaveValorDto;
 import com.gt.caphum.web.model.usuarios.UserRol;
 import com.gt.caphum.web.model.usuarios.Usuario;
 import com.gt.caphum.web.service.sistema.UsuarioService;

@@ -20,6 +20,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.gt.caphum.web.model.localizacion.Localidad;
 import com.gt.caphum.web.model.usuarios.Usuario;
 import com.gt.toolbox.spb.webapps.commons.infra.model.IWithIntegerId;
 import com.gt.toolbox.spb.webapps.commons.infra.model.IWithObservaciones;
@@ -59,6 +60,9 @@ public class Busqueda implements IWithIntegerId, IWithObservaciones {
     
     @ManyToOne
     Usuario interesado;
+    
+    @ManyToOne
+    Localidad localidad;
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude

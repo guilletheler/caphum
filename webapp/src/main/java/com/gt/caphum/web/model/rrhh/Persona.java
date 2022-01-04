@@ -14,10 +14,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.gt.caphum.web.model.CodigoNombre;
+import com.gt.caphum.web.model.localizacion.Localidad;
 import com.gt.toolbox.spb.webapps.commons.infra.model.IWithIntegerId;
 import com.gt.toolbox.spb.webapps.commons.infra.model.IWithObservaciones;
 
@@ -44,6 +46,8 @@ public class Persona extends CodigoNombre
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private String domicilio;
+
     @Column(length = 10000)
     @Basic(fetch = FetchType.LAZY)
     String observaciones;
@@ -61,6 +65,9 @@ public class Persona extends CodigoNombre
 	@CollectionTable(name = "aptitudes_personas", joinColumns = @JoinColumn(name = "persona_id"))
 	@Column(name = "aptitud")
 	private List<String> aptitudes;
+
+    @ManyToOne
+    private Localidad localidad;
 
     public List<Documento> getDocumentos() {
         if(documentos == null) {

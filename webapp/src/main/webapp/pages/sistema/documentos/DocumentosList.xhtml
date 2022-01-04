@@ -60,6 +60,10 @@
 						</p:commandButton>
 					</p:column>
 
+					<p:column style="width:2rem">
+						<p:rowToggler />
+					</p:column>
+
 					<p:column visible="#{sessionMB.inRole('SYSADMIN')}" headerText="ID" style="width: 80px"
 						sortBy="#{item.id}" filterBy="#{item.id}" filterMatchMode="contains">
 						<p:outputLabel value="#{item.id}" />
@@ -94,7 +98,11 @@
 							<f:convertDateTime timeZone="America/Buenos_Aires" type="date" pattern="dd/MM/yyyy" />
 						</p:outputLabel>
 					</p:column>
-
+					<p:rowExpansion>
+						<div style="width: 100%;">
+							<pe:documentViewer height="500" value="#{documentoListController.buildContent(item)}" download="#{item.fileName}" zoom="page-width"/>
+						</div>
+					</p:rowExpansion>
 				</p:dataTable>
 			</p:panel>
 			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-solid box-danger">

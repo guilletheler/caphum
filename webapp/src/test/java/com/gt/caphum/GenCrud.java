@@ -3,11 +3,12 @@ package com.gt.caphum;
 
 import java.io.File;
 
-import org.junit.jupiter.api.Test;
-
-import com.gt.caphum.web.model.rrhh.Documento;
+import com.gt.caphum.web.model.localizacion.Localidad;
+import com.gt.caphum.web.model.localizacion.Provincia;
 import com.gt.crudo.CrudCreator;
 import com.gt.crudo.CrudoFileWriter;
+
+import org.junit.jupiter.api.Test;
 
 //import com.gt.lotinfo.web.model.plataforma.AbstractApuesta;
 
@@ -15,7 +16,7 @@ public class GenCrud {
 
 	@Test
 	public void generaCud() {
-		CrudCreator crudCreator = new CrudCreator(Documento.class);
+		CrudCreator crudCreator = new CrudCreator(Localidad.class);
 		crudCreator.setProjectSourceFolder(new File("."));
 		crudCreator.generateListController(System.out);
 		System.out.println("\n\n\n\n");
@@ -25,7 +26,7 @@ public class GenCrud {
 		System.out.println("\n\n\n\n");
 		crudCreator.generateEditPage(System.out);
 
-		CrudoFileWriter.writeAll(crudCreator, "sistema/documentos", false);
+		CrudoFileWriter.writeAll(crudCreator, "sistema/localizacion", false);
 
 		assert (true);
 
