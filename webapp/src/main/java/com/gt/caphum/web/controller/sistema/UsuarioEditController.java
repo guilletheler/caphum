@@ -108,8 +108,6 @@ public class UsuarioEditController implements Serializable {
 				msg += " editado exitosamente";
 			}
 
-			addDetailMessage(msg);
-
 			ret = "ListUsuarios?faces-redirect=true";
 		} catch (ValidationException vex) {
 			msg = "Error:\n" + vex.getMessage();

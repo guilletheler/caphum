@@ -37,4 +37,9 @@ public class Localidad extends CodigoNombre implements IWithIntegerId, Serializa
     String codigoPostal;
 
     String prefijoTelefonico;
+
+    @Override
+    public String getEtiqueta() {
+        return getNombre() + " - " + provincia.getEtiqueta();
+    }
 }

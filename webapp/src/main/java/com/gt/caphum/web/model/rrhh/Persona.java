@@ -46,7 +46,14 @@ public class Persona extends CodigoNombre
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    String tipoDocumento;
+
+    String documento;
+
     private String domicilio;
+
+    @ManyToOne
+    private Localidad localidad;
 
     @Column(length = 10000)
     @Basic(fetch = FetchType.LAZY)
@@ -57,29 +64,56 @@ public class Persona extends CodigoNombre
     @Getter(AccessLevel.NONE)
     @OneToMany
     private List<Documento> documentos;
-    
+
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @Getter(AccessLevel.NONE)
     @ElementCollection
-	@CollectionTable(name = "aptitudes_personas", joinColumns = @JoinColumn(name = "persona_id"))
-	@Column(name = "aptitud")
-	private List<String> aptitudes;
+    @CollectionTable(name = "aptitudes_personas", joinColumns = @JoinColumn(name = "persona_id"))
+    @Column(name = "aptitud")
+    private List<String> aptitudes;
 
-    @ManyToOne
-    private Localidad localidad;
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @Getter(AccessLevel.NONE)
+    @ElementCollection
+    @CollectionTable(name = "telefonos_personas", joinColumns = @JoinColumn(name = "persona_id"))
+    @Column(name = "telefono")
+    private List<String> telefonos;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @Getter(AccessLevel.NONE)
+    @ElementCollection
+    @CollectionTable(name = "email_personas", joinColumns = @JoinColumn(name = "persona_id"))
+    @Column(name = "emails")
+    private List<String> emails;
 
     public List<Documento> getDocumentos() {
-        if(documentos == null) {
+        if (documentos == null) {
             documentos = new ArrayList<>();
         }
         return documentos;
     }
 
     public List<String> getAptitudes() {
-        if(aptitudes == null) {
+        if (aptitudes == null) {
             aptitudes = new ArrayList<>();
         }
         return aptitudes;
+    }
+
+    public List<String> getTelefonos() {
+        if (telefonos == null) {
+            telefonos = new ArrayList<>();
+        }
+        return telefonos;
+    }
+
+    public List<String> getEmails() {
+        if (emails == null) {
+            emails = new ArrayList<>();
+        }
+        return emails;
     }
 }

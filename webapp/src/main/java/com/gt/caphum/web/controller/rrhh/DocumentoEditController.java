@@ -8,6 +8,8 @@ import static com.github.adminfaces.template.util.Assert.has;
 import static com.gt.toolbox.spb.webapps.commons.infra.utils.Utils.addDetailMessage;
 
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
@@ -19,7 +21,9 @@ import javax.validation.ValidationException;
 import com.gt.caphum.web.model.rrhh.Documento;
 import com.gt.caphum.web.service.rrhh.DocumentoService;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.omnifaces.util.Faces;
+import org.primefaces.event.FileUploadEvent;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -91,4 +95,9 @@ public class DocumentoEditController implements Serializable {
 		return documento == null || documento.getId() == null;
 	}
 
+	public void handleFileUpload(FileUploadEvent event) {
+		documento.setContenido(ArrayUtils.toObject(event.getFile().getContent()));
+		Logger.getLogger(getClass().getName()).log(Level.INFO, "Se cargaron " + documento.getContenido().length
+				+ " bytes del archivo " + event.getFile().getFileName());
+	}
 }

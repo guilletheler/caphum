@@ -25,10 +25,14 @@
 					</li>
 				</ul>
 			</li>
-
-
-
-
+		</ui:fragment>
+		<ui:fragment rendered="#{sessionMB.inRole('RRHH')}">
+			<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Usuario<span
+						class="caret"></span></a>
+				<ul class="dropdown-menu multi-level" role="menu">
+					<ui:include src="mnurrhh.xhtml" />
+				</ul>
+			</li>
 		</ui:fragment>
 		<ui:fragment rendered="#{sessionMB.inRole('USUARIO')}">
 			<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Usuario<span

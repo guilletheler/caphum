@@ -1,17 +1,22 @@
 package com.gt.caphum.web.bean;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
+import com.gt.caphum.web.model.usuarios.UserRol;
+import com.gt.caphum.web.model.usuarios.Usuario;
+
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-
-import com.gt.caphum.web.model.usuarios.Usuario;
 
 import lombok.Getter;
 
@@ -40,15 +45,17 @@ public class SessionMB implements Serializable {
 			return false;
 		}
 
-		List<String> strRolesList = currentUser.getRoles().stream().map(userRol -> userRol.name())
-				.collect(Collectors.toList());
+		List<String> anyRolList = Arrays.asList(roles.split(","));
 
-		for (String rol : roles.split(",")) {
-			if (strRolesList.contains(rol.trim())) {
-				return true;
-			}
-		}
+		List<UserRol> userEffectiveRoleList = currentUser.getRoles().stream()
+				.flatMap(rol -> UserRol.getContainedRoles(rol).stream()).collect(Collectors.toList());
 
-		return false;
+		boolean ret = userEffectiveRoleList.stream().anyMatch(
+				userRol -> anyRolList.stream().anyMatch(anyRol -> userRol.name().equalsIgnoreCase(anyRol.trim())));
+
+		// Logger.getLogger(SessionMB.class.getName()).log(Level.INFO, "test {0} in effective: {1} ? {2}",
+		// 		new Object[] { roles, Arrays.toString(userEffectiveRoleList.toArray(UserRol[]::new)), ret });
+
+		return ret;
 	}
 }

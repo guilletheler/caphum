@@ -54,4 +54,9 @@ public class Provincia extends CodigoNombre implements IWithIntegerId, Serializa
         }
         return localidades;
     }
+
+    @Override
+    public String getEtiqueta() {
+        return getNombre() + " - " + pais.getNombre();
+    }
 }

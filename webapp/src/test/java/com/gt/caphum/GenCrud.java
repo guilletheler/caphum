@@ -3,8 +3,7 @@ package com.gt.caphum;
 
 import java.io.File;
 
-import com.gt.caphum.web.model.localizacion.Localidad;
-import com.gt.caphum.web.model.localizacion.Provincia;
+import com.gt.caphum.web.model.rrhh.Busqueda;
 import com.gt.crudo.CrudCreator;
 import com.gt.crudo.CrudoFileWriter;
 
@@ -16,7 +15,7 @@ public class GenCrud {
 
 	@Test
 	public void generaCud() {
-		CrudCreator crudCreator = new CrudCreator(Localidad.class);
+		CrudCreator crudCreator = new CrudCreator(Busqueda.class);
 		crudCreator.setProjectSourceFolder(new File("."));
 		crudCreator.generateListController(System.out);
 		System.out.println("\n\n\n\n");
@@ -26,7 +25,9 @@ public class GenCrud {
 		System.out.println("\n\n\n\n");
 		crudCreator.generateEditPage(System.out);
 
-		CrudoFileWriter.writeAll(crudCreator, "sistema/localizacion", false);
+		CrudoFileWriter.writeAll(crudCreator, "rrhh", false);
+		// CrudoFileWriter.writeEditPage(crudCreator, "rrhh", true);
+		// CrudoFileWriter.writeListPage(crudCreator, "rrhh", true);
 
 		assert (true);
 

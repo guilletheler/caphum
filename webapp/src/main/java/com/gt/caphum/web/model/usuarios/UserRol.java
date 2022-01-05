@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import lombok.Getter;
 
@@ -42,27 +44,30 @@ public enum UserRol {
     private UserRol(String nombre, String descripcion, String padres, String... folders) {
         this.nombre = nombre;
         this.descripcion = descripcion;
+        this.padres = padres;
         this.folders = folders;
     }
 
     public static UserRol parse(String nombre) {
         for (UserRol userRol : UserRol.values()) {
-            if (Objects.equals(nombre, userRol.getNombre())) {
+            if (Objects.equals(nombre, userRol.name())) {
                 return userRol;
             }
         }
         return null;
     }
 
-    public static List<UserRol> parseList(String roles) {
+    public static Set<UserRol> parseList(String roles) {
 
-        List<UserRol> ret = new ArrayList<>();
+        Set<UserRol> ret = new HashSet<>();
 
         if (roles != null && !roles.isEmpty()) {
             for (String str : roles.split(",")) {
                 UserRol userRol = parse(str.trim().toUpperCase());
                 if (userRol != null) {
                     ret.add(userRol);
+                } else {
+                    Logger.getLogger(UserRol.class.getName()).log(Level.WARNING, "No se encontró el rol {0}", str);
                 }
             }
         }
@@ -88,15 +93,41 @@ public enum UserRol {
                     ret.put(folder, new HashSet<>());
                 }
 
-                ret.get(folder).add(userRol.name());
+                getEffectiveRoles(userRol).forEach(r -> ret.get(folder).add(r.name()));
 
-                for (UserRol padres : UserRol.parseList(userRol.getPadres())) {
-                    ret.get(folder).add(padres.name());
-                }
             }
         }
 
         return ret;
     }
 
+    public static Set<UserRol> getEffectiveRoles(UserRol userRol) {
+        Set<UserRol> ret = new HashSet<>();
+        ret.add(userRol);
+
+        Set<UserRol> rolesPadre = parseList(userRol.getPadres());
+
+        if (userRol.getPadres() != null && userRol.getPadres().length() > 0 && rolesPadre.isEmpty()) {
+            Logger.getLogger(UserRol.class.getName()).log(Level.WARNING,
+                    "Roles padres no vacios pero no encontrado {0}", userRol.getPadres());
+        }
+
+        ret.addAll(rolesPadre);
+
+        return ret;
+    }
+
+    public static Set<UserRol> getContainedRoles(UserRol userRol) {
+        Set<UserRol> ret = new HashSet<>();
+        ret.add(userRol);
+
+        for(UserRol ur : UserRol.values()) {
+            Set<UserRol> rolesPadre = parseList(ur.getPadres());
+            if(rolesPadre.contains(userRol)) {
+                ret.addAll(getContainedRoles(ur));
+            }
+        }
+
+        return ret;
+    }
 }

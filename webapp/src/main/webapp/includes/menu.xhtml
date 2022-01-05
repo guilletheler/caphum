@@ -21,6 +21,15 @@
 			</li>
 
 		</ui:fragment>
+		<ui:fragment rendered="#{sessionMB.inRole('RRHH')}">
+			<li class="header">RRHH</li>
+			<li class="treeview"><a href="#"><i class="fa fa-users"></i>
+					<span>R.R.H.H.</span> <i class="fa fa-angle-left pull-right"></i> </a>
+				<ul class="treeview-menu">
+					<ui:include src="mnuRRHH.xhtml" />
+				</ul>
+			</li>
+		</ui:fragment>
 		<li class="header">General</li>
 		<ui:fragment rendered="#{sessionMB.inRole('USUARIO')}">
 			<li class="treeview"><a href="#"><i class="fa fa-user"></i>
@@ -30,6 +39,9 @@
 				</ul>
 			</li>
 		</ui:fragment>
+
+
+
 		<ui:fragment rendered="#{sessionMB.inRole('AYUDA')}">
 			<li class="treeview"><a href="#"><i class="fa fa-life-saver"></i>
 					<span>Ayuda</span> <i class="fa fa-angle-left pull-right"></i> </a>

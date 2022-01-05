@@ -8,8 +8,6 @@ import static com.gt.toolbox.spb.webapps.commons.infra.utils.Utils.addDetailMess
 
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;

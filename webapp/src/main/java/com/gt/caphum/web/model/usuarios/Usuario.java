@@ -6,6 +6,7 @@
 package com.gt.caphum.web.model.usuarios;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,9 +34,9 @@ import javax.persistence.Temporal;
 import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 
+import com.gt.caphum.web.model.CodigoNombre;
 import com.gt.toolbox.spb.webapps.commons.infra.model.IWithIntegerId;
 import com.gt.toolbox.spb.webapps.commons.infra.model.IWithObservaciones;
-import com.gt.caphum.web.model.CodigoNombre;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -175,5 +176,19 @@ public class Usuario extends CodigoNombre
 			return "";
 		}
 		return getRoles().stream().map(e -> e.toString()).reduce(", ", String::concat).substring(2);
+	}
+
+	public List<String> getTelefonos() {
+		if (telefonos == null) {
+			telefonos = new ArrayList<>();
+		}
+		return telefonos;
+	}
+
+	public List<String> getEmails() {
+		if (emails == null) {
+			emails = new ArrayList<>();
+		}
+		return emails;
 	}
 }

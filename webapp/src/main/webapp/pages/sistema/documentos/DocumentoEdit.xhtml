@@ -119,6 +119,8 @@
 							<p:outputLabel value="CONTENIDO" />
 						</div>
 						<div class="ui-sm-12 ui-g-12">
+							<p:fileUpload mode="simple" skinSimple="true" auto="true"
+								process="@this" update="messages" listener="#{documentoEditController.handleFileUpload}" />
 						</div>
 					</div>
 
