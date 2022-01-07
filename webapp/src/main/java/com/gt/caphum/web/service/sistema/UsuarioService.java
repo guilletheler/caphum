@@ -1,6 +1,16 @@
 package com.gt.caphum.web.service.sistema;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import com.gt.caphum.web.model.usuarios.UserRol;
+import com.gt.caphum.web.model.usuarios.Usuario;
+import com.gt.caphum.web.repo.sistema.UsuarioRepo;
+import com.gt.toolbox.spb.webapps.commons.infra.service.QueryHelper;
+import com.gt.toolbox.spb.webapps.commons.infra.datamodel.LazyDMFiller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -9,11 +19,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.gt.toolbox.spb.webapps.commons.infra.datamodel.LazyDMFiller;
-import com.gt.caphum.web.model.usuarios.Usuario;
-import com.gt.caphum.web.repo.sistema.UsuarioRepo;
-import com.gt.caphum.web.service.QueryHelper;
 
 import lombok.Getter;
 
@@ -91,4 +96,30 @@ public class UsuarioService implements LazyDMFiller<Usuario> {
 		return getRepo().save(usuario);
 	}
 	
+	public boolean inRole(String roles) {
+
+		Usuario currentUser = getCurrentUser();
+
+		if (currentUser == null) {
+			return false;
+		}
+
+		List<String> anyRolList = Arrays.asList(roles.split(","));
+
+		Set<UserRol> userEffectiveRoleList = getUserEffectiveRoles(currentUser);
+
+		boolean ret = userEffectiveRoleList.stream().anyMatch(
+				userRol -> anyRolList.stream().anyMatch(anyRol -> userRol.name().equalsIgnoreCase(anyRol.trim())));
+
+		// Logger.getLogger(getClass().getName()).log(Level.INFO, "test {0} in effective: {1} ? {2}",
+		// 		new Object[] { roles, Arrays.toString(userEffectiveRoleList.toArray(UserRol[]::new)), ret });
+
+		return ret;
+	}
+
+	public Set<UserRol> getUserEffectiveRoles(Usuario currentUser) {
+		Set<UserRol> userEffectiveRoleList = currentUser.getRoles().stream()
+				.flatMap(rol -> UserRol.getContainedRoles(rol).stream()).collect(Collectors.toSet());
+		return userEffectiveRoleList;
+	}
 }

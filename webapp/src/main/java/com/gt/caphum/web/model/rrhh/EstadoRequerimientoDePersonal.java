@@ -1,6 +1,6 @@
 package com.gt.caphum.web.model.rrhh;
 
-public enum EstadoBusqueda {
+public enum EstadoRequerimientoDePersonal {
     PLANIFICACION,
     INICIADA,
     FINALIZADA,

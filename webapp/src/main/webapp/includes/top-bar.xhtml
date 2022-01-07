@@ -24,16 +24,16 @@
 				style="width: 250px !important"><a href="#"
 				class="dropdown-toggle" data-toggle="dropdown"> <h:graphicImage
 						library="images" value="/resources/images/persona.png"
-						height="25px" style="margin-right: 10px" />#{sessionMB.currentUser.nombre}
+						height="25px" style="margin-right: 10px" />#{usuarioService.currentUser.nombre}
 			</a>
 				<ul class="dropdown-menu">
 					<li class="user-header">
 						<p>
-							#{sessionMB.currentUser.nombre} <small>#{sessionMB.currentUser.detalleRoles()}</small>
+							#{usuarioService.currentUser.nombre} <small>#{usuarioService.currentUser.detalleRoles()}</small>
 						</p>
 					</li>
 					<li class="user-footer"><h:form prependId="false">
-							<c:if test="#{sessionMB.inRole('USUARIO')}">
+							<c:if test="#{usuarioService.inRole('USUARIO')}">
 								<div class="pull-left">
 									<p:link styleClass="btn btn-danger" value="Cambiar contraseña"
 										outcome="/pages/usuario/cambioPass/CambiaPass" />
@@ -59,7 +59,7 @@
 
 		</ul>
 
-		<c:if test="#{sessionMB.inRole('USUARIO')}">
+		<c:if test="#{usuarioService.inRole('USUARIO')}">
 			<!-- Actualiza los mensajes cada 5 minutos -->
 			<!-- <p:poll interval="350" update="cantidad_mensajes" />-->
 		</c:if>

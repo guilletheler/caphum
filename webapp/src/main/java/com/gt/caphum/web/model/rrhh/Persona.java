@@ -2,6 +2,7 @@ package com.gt.caphum.web.model.rrhh;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Basic;
@@ -9,6 +10,8 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,11 +20,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.gt.caphum.web.model.CodigoNombre;
 import com.gt.caphum.web.model.localizacion.Localidad;
 import com.gt.toolbox.spb.webapps.commons.infra.model.IWithIntegerId;
 import com.gt.toolbox.spb.webapps.commons.infra.model.IWithObservaciones;
+
+import org.hibernate.annotations.Formula;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -35,7 +42,7 @@ import lombok.ToString;
 @Entity
 @Table(name = "personas")
 public class Persona extends CodigoNombre
-        implements Serializable, IWithIntegerId, IWithObservaciones {
+        implements Documentable, Serializable, IWithIntegerId, IWithObservaciones {
 
     private static final long serialVersionUID = 1L;
 
@@ -48,12 +55,18 @@ public class Persona extends CodigoNombre
 
     String tipoDocumento;
 
-    String documento;
+    String nroDocumento;
 
     private String domicilio;
 
     @ManyToOne
     private Localidad localidad;
+
+    @Temporal(TemporalType.DATE)
+    private Date fechaNacimiento;
+
+    @Temporal(TemporalType.DATE)
+    private Date ultimaModificacion;
 
     @Column(length = 10000)
     @Basic(fetch = FetchType.LAZY)
@@ -65,13 +78,19 @@ public class Persona extends CodigoNombre
     @OneToMany
     private List<Documento> documentos;
 
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @Getter(AccessLevel.NONE)
-    @ElementCollection
-    @CollectionTable(name = "aptitudes_personas", joinColumns = @JoinColumn(name = "persona_id"))
-    @Column(name = "aptitud")
-    private List<String> aptitudes;
+    @Column(length = 10000)
+    private String aptitudes;
+
+    @Column(length = 10000)
+    private String estudiosFormales;
+
+    @Column(length = 10000)
+    private String estudiosNoFormales;
+
+    @Enumerated(EnumType.STRING)
+    Genero genero;
+
+    private String idiomas;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
@@ -89,18 +108,14 @@ public class Persona extends CodigoNombre
     @Column(name = "emails")
     private List<String> emails;
 
+    @Formula("DATEDIFF('day', fecha_Nacimiento, CURRENT_DATE) / 365.25")
+    Integer edad;
+
     public List<Documento> getDocumentos() {
         if (documentos == null) {
             documentos = new ArrayList<>();
         }
         return documentos;
-    }
-
-    public List<String> getAptitudes() {
-        if (aptitudes == null) {
-            aptitudes = new ArrayList<>();
-        }
-        return aptitudes;
     }
 
     public List<String> getTelefonos() {

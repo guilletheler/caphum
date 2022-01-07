@@ -8,18 +8,23 @@ import static com.gt.toolbox.spb.webapps.commons.infra.utils.Utils.addDetailMess
 
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.application.FacesMessage.Severity;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.validation.ValidationException;
 
 import com.gt.caphum.web.model.rrhh.Documento;
-import com.gt.caphum.web.repo.rrhh.DocumentoRepo;
 import com.gt.caphum.web.service.rrhh.DocumentoService;
 import com.gt.toolbox.spb.webapps.commons.infra.datamodel.EntityLazyDataModel;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.primefaces.event.RowEditEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortMeta;
@@ -38,9 +43,6 @@ public class DocumentoListController implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Inject
-	DocumentoRepo documentoRepo;
-
-	@Inject
 	DocumentoService documentoService;
 
 	@Getter
@@ -51,13 +53,23 @@ public class DocumentoListController implements Serializable {
 		lazyDataModel = new EntityLazyDataModel<>(documentoService, Documento.class, "id");
 	}
 
+	public void crearDocumento() {
+		Documento documento = new Documento();
+		documento.setNombre("Nuevo Documento");
+		documento.setCodigo(documentoService.getRepo().nextCodigo());
+		documento.setFechaCreacion(new Date());
+
+		documentoService.save(documento);
+		lazyDataModel = new EntityLazyDataModel<>(documentoService, Documento.class, "id");
+	}
+
 	public void borrarDocumento(Documento documento) {
-		documentoRepo.delete(documento);
+		documentoService.getRepo().delete(documento);
 		addDetailMessage("Documento " + documento.getNombre() + " borrado exitosamente");
 	}
 
 	public SortMeta getDefaultSortBy() {
-		return SortMeta.builder().field("id").order(SortOrder.ASCENDING).build();
+		return SortMeta.builder().field("codigo").order(SortOrder.ASCENDING).build();
 	}
 
 	public StreamedContent buildContent(Documento documento) {
@@ -84,5 +96,27 @@ public class DocumentoListController implements Serializable {
 		return DefaultStreamedContent.builder()
 				.stream(() -> new ByteArrayInputStream(ArrayUtils.toPrimitive(doc.getContenido())))
 				.contentType(type).build();
+	}
+
+	public void onRowEdit(RowEditEvent<Documento> event) {
+
+		Documento documento = event.getObject();
+
+		String msg = "Documento " + (documento.getNombre() == null ? " creado exitosamente"
+				: (documento.getNombre().toString() + " editado exitosamente"));
+		Severity severity = FacesMessage.SEVERITY_INFO;
+
+		try {
+			documentoService.save(documento);
+		} catch (ValidationException vex) {
+			msg = "Error:\n" + vex.getMessage();
+			severity = FacesMessage.SEVERITY_ERROR;
+		}
+		addDetailMessage(msg, severity);
+	}
+
+	public void onRowCancel(RowEditEvent<Documento> event) {
+		FacesMessage msg = new FacesMessage("Edición cancelada código ", String.valueOf(event.getObject().getCodigo()));
+		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
 }

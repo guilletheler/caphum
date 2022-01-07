@@ -33,8 +33,8 @@ import lombok.ToString;
 
 @Data
 @Entity
-@Table(name = "busquedas")
-public class Busqueda implements IWithIntegerId, IWithObservaciones {
+@Table(name = "requerimientos_de_personal")
+public class RequerimientoDePersonal implements IWithIntegerId, IWithObservaciones, Documentable {
     public static final long serialVersionUID = 1L;
 
     @Id
@@ -56,7 +56,7 @@ public class Busqueda implements IWithIntegerId, IWithObservaciones {
     private Date finalizacion;
     
     @Enumerated(EnumType.STRING)
-    EstadoBusqueda estado;
+    EstadoRequerimientoDePersonal estado;
     
     @ManyToOne
     Usuario interesado;
@@ -64,10 +64,12 @@ public class Busqueda implements IWithIntegerId, IWithObservaciones {
     @ManyToOne
     Localidad localidad;
 
+
+
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @Getter(AccessLevel.NONE)
-    @OneToMany(mappedBy = "busqueda", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "requerimientoDePersonal", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Evaluacion> evaluaciones;
 
     @Column(length = 10000)

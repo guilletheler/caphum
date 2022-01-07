@@ -40,6 +40,6 @@ public class Localidad extends CodigoNombre implements IWithIntegerId, Serializa
 
     @Override
     public String getEtiqueta() {
-        return getNombre() + " - " + provincia.getEtiqueta();
+        return "(" + codigoPostal + ") " + getNombre() + " - " + provincia.getEtiqueta();
     }
 }

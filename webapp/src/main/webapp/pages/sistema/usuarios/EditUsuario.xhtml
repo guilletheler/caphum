@@ -100,11 +100,21 @@
 								<p:tab xmlns="http://www.w3.org/1999/xhtml" title="Roles">
 									<div class="ui-g-12 ui-md-12">
 										<p:selectManyMenu id="newUserRole" required="true"
+											var="userRol"
 											value="#{usuarioEditController.usuario.roles}"
 											showCheckbox="true" converter="entityConverter"
 											style="width: 100%">
 											<f:attribute name="collectionType" value="java.util.HashSet" />
-											<f:selectItems value="#{enumsMB.roles}" />
+											<f:selectItems value="#{enumsComponent.roles}" />
+											<p:column>
+												<p:outputLabel value="#{userRol.name()}" />
+											</p:column>
+											<p:column>
+												<p:outputLabel value="#{userRol.descripcion}" />
+											</p:column>
+											<p:column>
+												<p:outputLabel value="#{usuarioEditController.getRolesHijo(userRol)}" />
+											</p:column>
 										</p:selectManyMenu>
 										<span class="help-block"> <p:message for="newUserRole" />
 										</span>

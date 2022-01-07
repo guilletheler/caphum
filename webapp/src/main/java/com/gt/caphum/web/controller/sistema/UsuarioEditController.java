@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
@@ -18,14 +19,14 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.ValidationException;
 
-import org.omnifaces.util.Faces;
-
 import com.github.adminfaces.template.exception.AccessDeniedException;
-import com.gt.toolbox.spb.webapps.commons.infra.dto.ClaveValorDto;
 import com.gt.caphum.web.model.usuarios.UserRol;
 import com.gt.caphum.web.model.usuarios.Usuario;
 import com.gt.caphum.web.service.sistema.UsuarioService;
+import com.gt.toolbox.spb.webapps.commons.infra.dto.ClaveValorDto;
 import com.gt.toolbox.spb.webapps.commons.infra.utils.Utils;
+
+import org.omnifaces.util.Faces;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -169,4 +170,7 @@ public class UsuarioEditController implements Serializable {
 		}
 	}
 
+	public String getRolesHijo(UserRol userRol) {
+		return UserRol.getHijos(userRol).stream().map(UserRol::getNombre).sorted().collect(Collectors.joining(", "));
+	}
 }

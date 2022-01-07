@@ -1,25 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:pe="http://primefaces.org/ui/extensions"
-	xmlns:adm="http://github.com/adminfaces"
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions" xmlns:adm="http://github.com/adminfaces"
 	template="#{layoutMB.template}">
 
 	<ui:define name="title">
-        Edición de Persona
-    </ui:define>
+		Edición de Persona
+	</ui:define>
 
 	<ui:define name="body">
 		<f:metadata>
-			<f:viewParam name="id" value="#{personaEditController.id}"
-				converter="javax.faces.Long" />
+			<f:viewParam name="id" value="#{personaEditController.id}" converter="javax.faces.Long" />
 			<!-- use view action if you are in a Java EE 7 server: <f:viewAction action="#{personaEditController.init()}"/>-->
-			<f:event type="preRenderView"
-				listener="#{personaEditController.init}" />
+			<f:event type="preRenderView" listener="#{personaEditController.init}" />
 		</f:metadata>
 
 		<adm:breadcrumb
@@ -28,116 +23,153 @@
 		<h:form id="form" prependId="false">
 			<p:focus rendered="#{personaEditController.id == null}" />
 
-			<p:panel class="box box-solid box-primary"
-				header="CREANDO/EDITANDO UN PERSONA"
+			<p:panel class="box box-solid box-primary" header="CREANDO/EDITANDO UN PERSONA"
 				style="width: 100%; height: 100%">
 
 				<div class="ui-g ui-fluid">
-				
-				<div style="#{(sessionMB.inRole('SYSADMIN'))?'':'display:none'}"
-	class="ui-g-12 ui-md-4">
-	<div class="ui-sm-12 ui-g-12">
-		<p:outputLabel value="ID" />
-	</div>
-	<div class="ui-sm-12 ui-g-12">
-		<p:outputLabel value="#{item.id}"/>
-	</div>
-</div>
 
-<div class="ui-g-12 ui-md-12">
-	<div class="ui-sm-12 ui-g-12">
-		<p:outputLabel for="observaciones" value="OBSERVACIONES" />
-	</div>
-	<div class="ui-sm-12 ui-g-12">
-		<p:inputTextarea id="observaciones" rows="3" cols="20"
-			value="#{personaEditController.persona.observaciones}"
-			autoResize="true" />
-	</div>
-</div>
-<div class="ui-g-12 ui-md-6">
-	<div class="ui-sm-12 ui-g-12">
-		<p:outputLabel for="domicilio" value="DOMICILIO" />
-	</div>
-	<div class="ui-sm-12 ui-g-12">
-		<p:inputText id="domicilio" value="#{personaEditController.persona.domicilio}" />
-		<p:tooltip for="domicilio" value="Valor de domicilio" position="top" />
-	</div>
-</div>
-<div class="ui-g-12 ui-md-4">
-	<div class="ui-sm-12 ui-g-12">
-		<p:outputLabel for="localidad" value="LOCALIDAD" />
-	</div>
-	<div class="ui-sm-12 ui-g-12">
-		<p:selectOneMenu id="localidad"
-			value="#{personaEditController.persona.localidad}"
-			style="width:100%" filter="true" filterMatchMode="contains"
-			converter="entityConverter" styleClass="selectOneMenu">
-			<f:selectItem itemLabel="Seleccione una opcion" itemValue="#{null}" />
-			<f:selectItems value="#{localidadRepo.findAll()}" var="item"
-				itemLabel="#{item.etiqueta}" itemValue="#{item}" />
-		</p:selectOneMenu>
-		<p:tooltip for="localidad" value="Valor de localidad" position="top" />
-	</div>
-</div>
-
-<div class="ui-g-12 ui-md-6">
-	<div class="ui-sm-12 ui-g-12">
-		<p:outputLabel for="tipoDocumento" value="TIPODOCUMENTO" />
-	</div>
-	<div class="ui-sm-12 ui-g-12">
-		<p:inputText id="tipoDocumento" value="#{personaEditController.persona.tipoDocumento}" />
-		<p:tooltip for="tipoDocumento" value="Valor de tipoDocumento" position="top" />
-	</div>
-</div>
-<div class="ui-g-12 ui-md-6">
-	<div class="ui-sm-12 ui-g-12">
-		<p:outputLabel for="documento" value="DOCUMENTO" />
-	</div>
-	<div class="ui-sm-12 ui-g-12">
-		<p:inputText id="documento" value="#{personaEditController.persona.documento}" />
-		<p:tooltip for="documento" value="Valor de documento" position="top" />
-	</div>
-</div>
-<div class="ui-g-12 ui-md-3">
-	<div class="ui-sm-12 ui-g-12">
-		<p:outputLabel for="codigo" value="CODIGO" />
-	</div>
-	<div class="ui-sm-12 ui-g-12">
-		<p:inputNumber id="codigo" value="#{personaEditController.persona.codigo}" 
-						thousandSeparator="" decimalPlaces="0"
-		/>
-		<p:tooltip for="codigo" value="Valor de codigo" position="top" />
-	</div>
-</div>
-<div class="ui-g-12 ui-md-6">
-	<div class="ui-sm-12 ui-g-12">
-		<p:outputLabel for="nombre" value="NOMBRE" />
-	</div>
-	<div class="ui-sm-12 ui-g-12">
-		<p:inputText id="nombre" value="#{personaEditController.persona.nombre}" />
-		<p:tooltip for="nombre" value="Valor de nombre" position="top" />
-	</div>
-</div>
-				
+					<ui:fragment rendered="#{usuarioService.inRole('SYSADMIN')}">
+						<div class="ui-g-12 ui-md-2">
+							<div class="ui-sm-12 ui-g-12">
+								<p:outputLabel value="ID" />
+							</div>
+							<div class="ui-sm-12 ui-g-12">
+								<p:outputLabel value="#{item.id}" />
+							</div>
+						</div>
+					</ui:fragment>
+					<div class="ui-g-12 ui-md-2">
+						<div class="ui-sm-12 ui-g-12">
+							<p:outputLabel for="codigo" value="CODIGO" />
+						</div>
+						<div class="ui-sm-12 ui-g-12">
+							<p:inputNumber id="codigo" value="#{personaEditController.persona.codigo}"
+								thousandSeparator="" decimalPlaces="0" />
+							<p:tooltip for="codigo" value="Valor de codigo" position="top" />
+						</div>
+					</div>
+					<div class="ui-g-12 ui-md-7">
+						<div class="ui-sm-12 ui-g-12">
+							<p:outputLabel for="nombre" value="NOMBRE" />
+						</div>
+						<div class="ui-sm-12 ui-g-12">
+							<p:inputText id="nombre" value="#{personaEditController.persona.nombre}" />
+							<p:tooltip for="nombre" value="Valor de nombre" position="top" />
+						</div>
+					</div>
+					<div class="ui-g-12 ui-md-2">
+						<div class="ui-sm-12 ui-g-12">
+							<p:outputLabel for="tipoDocumento" value="TIPODOCUMENTO" />
+						</div>
+						<div class="ui-sm-12 ui-g-12">
+							<p:inputText id="tipoDocumento" value="#{personaEditController.persona.tipoDocumento}" />
+							<p:tooltip for="tipoDocumento" value="Valor de tipoDocumento" position="top" />
+						</div>
+					</div>
+					<div class="ui-g-12 ui-md-2">
+						<div class="ui-sm-12 ui-g-12">
+							<p:outputLabel for="nroDocumento" value="NRO DOCUMENTO" />
+						</div>
+						<div class="ui-sm-12 ui-g-12">
+							<p:inputText id="nroDocumento" value="#{personaEditController.persona.nroDocumento}" />
+							<p:tooltip for="nroDocumento" value="Numero de documento" position="top" />
+						</div>
+					</div>
+					<div class="ui-g-12 ui-md-2">
+						<div class="ui-sm-12 ui-g-12">
+							<p:outputLabel for="fechaNacimiento" value="FECHA NACIMIENTO" />
+						</div>
+						<div class="ui-sm-12 ui-g-12">
+							<p:datePicker id="fechaNacimiento" value="#{personaEditController.persona.fechaNacimiento}"
+								locale="es" monthNavigator="true" yearNavigator="true" />
+						</div>
+					</div>
+					<div class="ui-g-12 ui-md-5">
+						<div class="ui-sm-12 ui-g-12">
+							<p:outputLabel for="domicilio" value="DOMICILIO" />
+						</div>
+						<div class="ui-sm-12 ui-g-12">
+							<p:inputText id="domicilio" value="#{personaEditController.persona.domicilio}" />
+							<p:tooltip for="domicilio" value="Valor de domicilio" position="top" />
+						</div>
+					</div>
+					<div class="ui-g-12 ui-md-3">
+						<div class="ui-sm-12 ui-g-12">
+							<p:outputLabel for="localidad" value="LOCALIDAD" />
+						</div>
+						<div class="ui-sm-12 ui-g-12">
+							<p:selectOneMenu id="localidad" value="#{personaEditController.persona.localidad}"
+								style="width:100%" filter="true" filterMatchMode="contains" converter="entityConverter"
+								styleClass="selectOneMenu">
+								<f:selectItem itemLabel="Seleccione una opcion" itemValue="#{null}" />
+								<f:selectItems value="#{localidadRepo.findAll()}" var="item"
+									itemLabel="#{item.etiqueta}" itemValue="#{item}" />
+							</p:selectOneMenu>
+							<p:tooltip for="localidad" value="Valor de localidad" position="top" />
+						</div>
+					</div>
+					<div class="ui-g-12 ui-md-12">
+						<div class="ui-sm-12 ui-g-12">
+							<p:outputLabel for="telefonos" value="TELEFONOS" />
+						</div>
+						<div class="ui-sm-12 ui-g-12">
+							<p:chips id="telefonos" addOnPaste="true" separator=","
+								value="#{personaEditController.persona.telefonos}" />
+						</div>
+					</div>
+					<div class="ui-g-12 ui-md-12">
+						<div class="ui-sm-12 ui-g-12">
+							<p:outputLabel for="emails" value="EMAILS" />
+						</div>
+						<div class="ui-sm-12 ui-g-12">
+							<p:chips id="emails" addOnPaste="true" separator=","
+								value="#{personaEditController.persona.emails}" />
+						</div>
+					</div>
+					<div class="ui-g-12 ui-md-12">
+						<div class="ui-sm-12 ui-g-12">
+							<p:outputLabel for="aptitudes" value="APTITUDES" />
+						</div>
+						<div class="ui-sm-12 ui-g-12">
+							<p:chips id="aptitudes" addOnPaste="true" separator=","
+								value="#{personaEditController.aptitudesList}" />
+						</div>
+					</div>
+					<div class="ui-g-12 ui-md-12">
+						<div class="ui-sm-12 ui-g-12">
+							<div class="ui-g-12 ui-md-12">
+								<div class="ui-sm-12 ui-g-12">
+									<ui:include src="EditDocumentosFragment.xhtml">
+										<ui:param name="documentableHelper" value="#{personaEditController.documentableHelper}" />
+									</ui:include>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="ui-g-12 ui-md-12">
+						<div class="ui-sm-12 ui-g-12">
+							<p:outputLabel for="observaciones" value="OBSERVACIONES" />
+						</div>
+						<div class="ui-sm-12 ui-g-12">
+							<p:inputTextarea id="observaciones" rows="3" cols="20"
+								value="#{personaEditController.persona.observaciones}" autoResize="true" />
+						</div>
+					</div>
 				</div>
 
-				<p:commandButton action="#{personaEditController.save}"
-					value="Guardar" update="@form" styleClass="btn btn-success" />
-				<p:commandButton value="Volver"
-					action="PersonasList?faces-redirect=true"
-					styleClass="btn btn-danger" process="@this" immediate="true" >
+				<p:commandButton action="#{personaEditController.save}" value="Guardar" update="@form"
+					styleClass="btn btn-success" />
+				<p:commandButton value="Volver" action="PersonasList?faces-redirect=true" styleClass="btn btn-danger"
+					process="@this" immediate="true">
 					<p:confirm header="Descartar cambios" message="¿Está seguro de descartar los cambios?"
 						icon="ui-icon-alert" />
 				</p:commandButton>
 
 			</p:panel>
-			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
-				styleClass="box-danger box-solid">
-				<p:commandButton value="Si" type="button"
-					styleClass="btn-material btn-primary ui-confirmdialog-yes"
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger box-solid">
+				<p:commandButton value="Si" type="button" styleClass="btn-material btn-primary ui-confirmdialog-yes"
 					icon="fa fa-check" />
-				<p:commandButton value="No" type="button"
-					styleClass="btn-material btn-danger ui-confirmdialog-no"
+				<p:commandButton value="No" type="button" styleClass="btn-material btn-danger ui-confirmdialog-no"
 					icon="fa fa-close" />
 			</p:confirmDialog>
 		</h:form>

@@ -3,7 +3,7 @@ package com.gt.caphum;
 
 import java.io.File;
 
-import com.gt.caphum.web.model.rrhh.Busqueda;
+import com.gt.caphum.web.model.rrhh.RequerimientoDePersonal;
 import com.gt.crudo.CrudCreator;
 import com.gt.crudo.CrudoFileWriter;
 
@@ -15,7 +15,7 @@ public class GenCrud {
 
 	@Test
 	public void generaCud() {
-		CrudCreator crudCreator = new CrudCreator(Busqueda.class);
+		CrudCreator crudCreator = new CrudCreator(RequerimientoDePersonal.class);
 		crudCreator.setProjectSourceFolder(new File("."));
 		crudCreator.generateListController(System.out);
 		System.out.println("\n\n\n\n");

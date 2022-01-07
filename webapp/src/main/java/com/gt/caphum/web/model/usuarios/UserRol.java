@@ -5,10 +5,8 @@
  */
 package com.gt.caphum.web.model.usuarios;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -23,10 +21,10 @@ import lombok.Getter;
  */
 public enum UserRol {
     SYSADMIN("ADMINISTRADOR DE SISTEMAS", "ABM usuarios, ABM parámetros de sistema", "", "/pages/sistema/**"),
-    RRHH("R.R.H.H.", "", "SYSADMIN", "/pages/rrhh/**"),
-    INTERESADO("INTERESADO", "", "SYSADMIN", "/pages/interesado/**"),
-    USUARIO("CAMBIO DE CONTRASEÑA", "", "SYSADMIN", "/pages/usuario/**"),
-    WEBSERVICES("WEBSERVICES", "", "SYSADMIN", "/ws/**"),
+    RRHH("R.R.H.H.", "ABM Personas, ABM Puestos, Gestión de búsquedas", "SYSADMIN", "/pages/rrhh/**"),
+    INTERESADO("INTERESADO", "Ver búsquedas habilitadas por RRHH", "SYSADMIN", "/pages/interesado/**"),
+    USUARIO("CAMBIO DE CONTRASEÑA", "Cambio de contraseña, Mensajes entre usuarios", "SYSADMIN", "/pages/usuario/**"),
+    WEBSERVICES("WEBSERVICES", "Acceso a webservice", "SYSADMIN", "/ws/**"),
     AYUDA("AYUDA", "Muestra la ayuda del sistema", "SYSADMIN", "/pages/ayuda/**");
 
     @Getter
@@ -120,7 +118,12 @@ public enum UserRol {
     public static Set<UserRol> getContainedRoles(UserRol userRol) {
         Set<UserRol> ret = new HashSet<>();
         ret.add(userRol);
-
+        ret.addAll(getHijos(userRol));
+        return ret;
+    }
+    
+    public static Set<UserRol> getHijos(UserRol userRol) {
+        Set<UserRol> ret = new HashSet<>();
         for(UserRol ur : UserRol.values()) {
             Set<UserRol> rolesPadre = parseList(ur.getPadres());
             if(rolesPadre.contains(userRol)) {

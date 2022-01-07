@@ -4,12 +4,13 @@
  */
 package com.gt.caphum.web.service.rrhh;
 
+import java.util.Date;
 import java.util.Map;
 
 import com.gt.caphum.web.model.rrhh.Documento;
 import com.gt.caphum.web.repo.rrhh.DocumentoRepo;
-import com.gt.caphum.web.service.QueryHelper;
 import com.gt.toolbox.spb.webapps.commons.infra.datamodel.SelectableLazyDMFiller;
+import com.gt.toolbox.spb.webapps.commons.infra.service.QueryHelper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -39,6 +40,7 @@ public class DocumentoService implements SelectableLazyDMFiller<Documento> {
 	}
 	
 	public void save(Documento documento) {
+		documento.setUltimaModificacion(new Date());
 		repo.save(documento);
 	}
 }

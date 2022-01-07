@@ -2,6 +2,7 @@ package com.gt.caphum.web.model.rrhh;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Basic;
@@ -15,6 +16,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.gt.toolbox.spb.webapps.commons.infra.model.IWithIntegerId;
 import com.gt.toolbox.spb.webapps.commons.infra.model.IWithObservaciones;
@@ -28,7 +31,7 @@ import lombok.ToString;
 @Data
 @Entity
 @Table(name = "evaluaciones")
-public class Evaluacion implements IWithIntegerId, IWithObservaciones, Serializable {
+public class Evaluacion implements Documentable, IWithIntegerId, IWithObservaciones, Serializable {
     
     public static final long serialVersionUID = 1L;
 
@@ -39,8 +42,10 @@ public class Evaluacion implements IWithIntegerId, IWithObservaciones, Serializa
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private Short puntaje;
+
     @ManyToOne
-    private Busqueda busqueda;
+    private RequerimientoDePersonal requerimientoDePersonal;
 
     @Enumerated(EnumType.STRING)
     private EstadoEvaluacion estado;
@@ -51,6 +56,9 @@ public class Evaluacion implements IWithIntegerId, IWithObservaciones, Serializa
     @Column(length = 10000)
     @Basic(fetch = FetchType.LAZY)
     String observaciones;
+
+    @Temporal(TemporalType.DATE)
+    private Date fechaEntrevista;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

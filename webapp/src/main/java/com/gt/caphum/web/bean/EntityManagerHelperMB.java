@@ -1,10 +1,10 @@
 package com.gt.caphum.web.bean;
 
-import javax.inject.Named;
+import javax.annotation.ManagedBean;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-@Named
+@ManagedBean
 public class EntityManagerHelperMB {
 
 	@PersistenceContext

@@ -4,7 +4,7 @@
 	xmlns:sec="http://www.springframework.org/security/tags" xmlns:h="http://java.sun.com/jsf/html">
 
 	<ul class="nav navbar-nav">
-		<ui:fragment rendered="#{sessionMB.inRole('SYSADMIN')}">
+		<ui:fragment rendered="#{usuarioService.inRole('SYSADMIN')}">
 			<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Configuracion<span
 						class="caret"></span></a>
 				<ul class="dropdown-menu multi-level" role="menu">
@@ -26,7 +26,7 @@
 				</ul>
 			</li>
 		</ui:fragment>
-		<ui:fragment rendered="#{sessionMB.inRole('RRHH')}">
+		<ui:fragment rendered="#{usuarioService.inRole('RRHH')}">
 			<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Usuario<span
 						class="caret"></span></a>
 				<ul class="dropdown-menu multi-level" role="menu">
@@ -34,7 +34,7 @@
 				</ul>
 			</li>
 		</ui:fragment>
-		<ui:fragment rendered="#{sessionMB.inRole('USUARIO')}">
+		<ui:fragment rendered="#{usuarioService.inRole('USUARIO')}">
 			<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Usuario<span
 						class="caret"></span></a>
 				<ul class="dropdown-menu multi-level" role="menu">
@@ -42,7 +42,7 @@
 				</ul>
 			</li>
 		</ui:fragment>
-		<ui:fragment rendered="#{sessionMB.inRole('AYUDA')}">
+		<ui:fragment rendered="#{usuarioService.inRole('AYUDA')}">
 			<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Ayuda<span
 						class="caret"></span></a>
 				<ul class="dropdown-menu multi-level" role="menu">

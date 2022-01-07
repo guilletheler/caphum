@@ -1,8 +1,9 @@
 package com.gt.caphum.web.model.rrhh;
 
-import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -15,14 +16,14 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import com.gt.caphum.web.model.CodigoNombre;
 import com.gt.toolbox.spb.webapps.commons.infra.model.IWithIntegerId;
 import com.gt.toolbox.spb.webapps.commons.infra.model.IWithObservaciones;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
+import org.primefaces.model.file.UploadedFile;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -35,56 +36,55 @@ import lombok.ToString;
 @Table(name = "documentos")
 public class Documento extends CodigoNombre implements IWithIntegerId, IWithObservaciones, Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    /**
-     * id
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+  /**
+   * id
+   */
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
 
-    String fileName;
+  String fileName;
 
-    @Temporal(TemporalType.DATE)
-    Date fechaCreacion;
+  String contentType;
 
-    @Temporal(TemporalType.DATE)
-    Date fechaVencimiento;
+  @Temporal(TemporalType.DATE)
+  Date fechaCreacion;
 
-    @Temporal(TemporalType.DATE)
-    Date fechaEliminacion;
+  @Temporal(TemporalType.DATE)
+  private Date ultimaModificacion;
 
-    @Column(length = 10000)
-    @Basic(fetch = FetchType.LAZY)
-    String observaciones;
+  @Temporal(TemporalType.DATE)
+  Date fechaVencimiento;
 
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    @Column(length = 20 * 1024 * 1024)
-    Byte[] contenido;
+  @Temporal(TemporalType.DATE)
+  Date fechaEliminacion;
 
-    public StreamedContent getStreamedContent() {
+  @Column(length = 10000)
+  @Basic(fetch = FetchType.LAZY)
+  String observaciones;
 
-		String type = "";
+  @Lob
+  @Basic(fetch = FetchType.LAZY)
+  @Column(length = 20 * 1024 * 1024)
+  Byte[] contenido;
 
-		if (getFileName().toLowerCase().trim().endsWith(".pdf")) {
-			type = "application/pdf";
-		} else if (getFileName().toLowerCase().trim().endsWith(".xls")
-				|| getFileName().toLowerCase().trim().endsWith(".xlsx")) {
-			type = "application/vnd.ms-excel";
-		} else if (getFileName().toLowerCase().trim().endsWith(".png")) {
-			type = "image/png";
-		} else if (getFileName().toLowerCase().trim().endsWith(".jpg")
-				|| getFileName().toLowerCase().trim().endsWith(".jpeg")) {
-			type = "image/jpeg";
-		} else if (getFileName().toLowerCase().trim().endsWith(".doc")
-				|| getFileName().toLowerCase().trim().endsWith(".docx")) {
-			type = "application/msword";
-		}
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  @Transient
+  UploadedFile uploadedFile;
 
-		return DefaultStreamedContent.builder()
-				.stream(() -> new ByteArrayInputStream(ArrayUtils.toPrimitive(getContenido())))
-				.contentType(type).build();
-	}
+  public void setUploadedFile(UploadedFile file) {
+    Logger.getLogger(getClass().getName()).log(Level.INFO,
+        "setUploadedFile: " + file.getFileName() + " " + file.getSize());
+    this.uploadedFile = file;
+    setContenido(ArrayUtils.toObject(file.getContent()));
+    setFileName(file.getFileName());
+    setContentType(file.getContentType());
+  }
+
+  public UploadedFile getUploadedFile() {
+    return uploadedFile;
+  }
 }

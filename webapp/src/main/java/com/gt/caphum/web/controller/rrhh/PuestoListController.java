@@ -13,14 +13,13 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.primefaces.model.SortMeta;
-import org.primefaces.model.SortOrder;
-import org.primefaces.model.LazyDataModel;
+import com.gt.caphum.web.model.rrhh.Puesto;
+import com.gt.caphum.web.service.rrhh.PuestoService;
 import com.gt.toolbox.spb.webapps.commons.infra.datamodel.EntityLazyDataModel;
 
-import com.gt.caphum.web.model.rrhh.Puesto;
-import com.gt.caphum.web.repo.rrhh.PuestoRepo;
-import com.gt.caphum.web.service.rrhh.PuestoService;
+import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.SortMeta;
+import org.primefaces.model.SortOrder;
 
 import lombok.Getter;
 

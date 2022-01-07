@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.gt.toolbox.spb.webapps.commons.infra.datamodel.LazyDMFiller;
 import com.gt.caphum.web.model.sistema.AppParam;
 import com.gt.caphum.web.repo.sistema.AppParamRepo;
-import com.gt.caphum.web.service.QueryHelper;
+import com.gt.toolbox.spb.webapps.commons.infra.service.QueryHelper;
 
 import lombok.Getter;
 

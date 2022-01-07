@@ -16,7 +16,7 @@ import com.gt.caphum.web.model.localizacion.Pais;
 import com.gt.caphum.web.repo.localizacion.LocalidadRepo;
 import com.gt.caphum.web.repo.localizacion.PaisRepo;
 import com.gt.caphum.web.repo.localizacion.ProvinciaRepo;
-import com.gt.caphum.web.service.QueryHelper;
+import com.gt.toolbox.spb.webapps.commons.infra.service.QueryHelper;
 
 import lombok.Getter;
 

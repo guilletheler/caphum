@@ -1,0 +1,131 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui"
+    xmlns:adm="http://github.com/adminfaces">
+    <p:menubar>
+        <p:menuitem value="Nuevo DOCUMENTO" icon="fa fa-plus"
+            action="#{documentableHelper.crearDocumento}" update="documentoDatatable" />
+    </p:menubar>
+
+    <p:dataTable id="documentoDatatable" value="#{documentableHelper.documentos}"
+        widgetVar="documentoTable" var="item"
+        paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exportar}"
+        currentPageReportTemplate="{totalRecords} [ {currentPage} / {totalPages} ]"
+        emptyMessage="No se encontraron elementos" paginator="true" multiViewState="true" sortMode="multiple" rows="20"
+        editable="true" rowsPerPageTemplate="20,50,100" lazy="true" reflow="true" style="width:100%">
+
+        <p:ajax event="filter" global="false" />
+
+        <f:facet name="{Exportar}">
+            <p:outputLabel value="   EXPORTAR: " />
+            <h:commandLink styleClass="tableColumnHeader" title="Exportar a XLS">
+                <i class="fa fa-fw fa-file-excel-o" />
+                <p:dataExporter type="xlsx" target="documentoDatatable" fileName="ListaDocumentos"
+                    postProcessor="#{tableExporterUtilsComponent.acomodaXls}" />
+            </h:commandLink>
+        </f:facet>
+
+        <p:column visible="#{usuarioService.inRole('SYSADMIN')}" headerText="ID" style="width: 80px" sortBy="#{item.id}"
+            filterBy="#{item.id}" filterMatchMode="contains">
+            <p:outputLabel value="#{item.id}" />
+        </p:column>
+        <p:column headerText="CODIGO" style="width: 80px" sortBy="#{item.codigo}" filterBy="#{item.codigo}"
+            filterMatchMode="contains">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <p:outputLabel value="#{item.codigo}" />
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputNumber value="#{item.codigo}" decimalPlaces="0" />
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        <p:column headerText="NOMBRE" sortBy="#{item.nombre}" filterBy="#{item.nombre}" filterMatchMode="contains">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <p:outputLabel value="#{item.nombre}" />
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputText value="#{item.nombre}" />
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        <p:column headerText="FILENAME" sortBy="#{item.fileName}" filterBy="#{item.fileName}"
+            filterMatchMode="contains">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <p:outputLabel value="#{item.fileName}" />
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputText id="fileName" value="#{item.fileName}" />
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        <p:column headerText="CONTENIDO" style="width: 120px" sortBy="#{item.contentType}"
+            filterBy="#{item.contentType}" filterMatchMode="contains">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <p:outputLabel value="#{item.contentType}" />
+                </f:facet>
+                <f:facet name="input">
+                    <p:fileUpload value="#{item.uploadedFile}" mode="simple" skinSimple="true" auto="true"
+                        update="fileName" />
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        <p:column style="width:5rem">
+            <p:commandButton title="Previsualizar" icon="fa fa-search" global="false" class="btn btn-primary btn-xs"
+                action="#{documentPreviewDialogController.preview(item)}">
+            </p:commandButton>
+        </p:column>
+        <p:column headerText="CREADO" style="width: 90px" sortBy="#{item.fechaCreacion}"
+            filterBy="#{item.fechaCreacion}" filterMatchMode="contains">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <p:outputLabel value="#{item.fechaCreacion}">
+                        <f:convertDateTime timeZone="America/Buenos_Aires" type="date" pattern="dd/MM/yyyy" />
+                    </p:outputLabel>
+                </f:facet>
+                <f:facet name="input">
+                    <p:datePicker value="#{item.fechaCreacion}" locale="es" monthNavigator="true" />
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        <p:column headerText="VENCE" style="width: 90px" sortBy="#{item.fechaVencimiento}"
+            filterBy="#{item.fechaVencimiento}" filterMatchMode="contains">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <p:outputLabel value="#{item.fechaVencimiento}">
+                        <f:convertDateTime timeZone="America/Buenos_Aires" type="date" pattern="dd/MM/yyyy" />
+                    </p:outputLabel>
+                </f:facet>
+                <f:facet name="input">
+                    <p:datePicker value="#{item.fechaVencimiento}" locale="es" monthNavigator="true" />
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        <p:column headerText="ELIMINAR" style="width: 90px" sortBy="#{item.fechaEliminacion}"
+            filterBy="#{item.fechaEliminacion}" filterMatchMode="contains">
+            <p:cellEditor>
+                <f:facet name="output">
+                    <p:outputLabel value="#{item.fechaEliminacion}">
+                        <f:convertDateTime timeZone="America/Buenos_Aires" type="date" pattern="dd/MM/yyyy" />
+                    </p:outputLabel>
+                </f:facet>
+                <f:facet name="input">
+                    <p:datePicker value="#{item.fechaEliminacion}" locale="es" monthNavigator="true" />
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        <p:column style="width:5rem">
+            <p:commandButton actionListener="#{documentableHelper.borrarDocumento(item)}"
+                update="documentoDatatable" class="btn btn-danger btn-xs" icon="fa fa-fw fa fa-trash-o"
+                title="Eliminar">
+                <p:confirm header="Eliminar Documento" message="¿Está seguro de eliminar la entidad?"
+                    icon="ui-icon-alert" />
+            </p:commandButton>
+        </p:column>
+        <p:column style="width:6rem">
+            <p:rowEditor editTitle="Editar" cancelTitle="Cancelar" saveTitle="Guardar" />
+        </p:column>
+    </p:dataTable>
+</ui:composition>

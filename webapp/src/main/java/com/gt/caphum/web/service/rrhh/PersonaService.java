@@ -4,17 +4,22 @@
  */
 package com.gt.caphum.web.service.rrhh;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
+
+import com.gt.caphum.web.model.rrhh.Documento;
+import com.gt.caphum.web.model.rrhh.Persona;
+import com.gt.caphum.web.repo.rrhh.DocumentoRepo;
+import com.gt.caphum.web.repo.rrhh.PersonaRepo;
+import com.gt.toolbox.spb.webapps.commons.infra.datamodel.SelectableLazyDMFiller;
+import com.gt.toolbox.spb.webapps.commons.infra.service.QueryHelper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import com.gt.toolbox.spb.webapps.commons.infra.datamodel.SelectableLazyDMFiller;
-import com.gt.caphum.web.model.rrhh.Persona;
-import com.gt.caphum.web.repo.rrhh.PersonaRepo;
-import com.gt.caphum.web.service.QueryHelper;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.Getter;
 
@@ -24,6 +29,9 @@ public class PersonaService implements SelectableLazyDMFiller<Persona> {
 	@Getter
 	@Autowired
 	PersonaRepo repo;
+
+	@Autowired
+	DocumentoRepo documentoRepo;
 
 	public Page<Persona> findByFilter(Map<String, String> filters, Pageable pageable) {
 		return repo.findAll(QueryHelper.getFilterSpecification(filters), pageable);
@@ -39,7 +47,22 @@ public class PersonaService implements SelectableLazyDMFiller<Persona> {
 	}
 	
 	public void save(Persona persona) {
+		persona.setUltimaModificacion(new Date());
 		repo.save(persona);
 	}
+
+	@Transactional
+    public void save(Persona persona, List<Documento> documentosEliminados) {
+
+		persona.getDocumentos().removeAll(documentosEliminados);
+
+		for(int i = 0; i < persona.getDocumentos().size(); i++) {
+			persona.getDocumentos().get(i).setUltimaModificacion(new Date());
+			persona.getDocumentos().set(i, documentoRepo.save(persona.getDocumentos().get(i)));
+		}
+
+		this.save(persona);
+
+    }
 }
 

@@ -49,8 +49,8 @@
 							title="Exportar a XLS">
 							<i class="fa fa-fw fa-file-excel-o" />
 							<p:dataExporter type="xlsx"
-								postProcessor="#{tableExporterUtilsMB.acomodaXls}"
-								target="datatable" fileName="Lista" />
+								postProcessor="#{tableExporterUtilsComponent.acomodaXls}"
+								target="datatable" fileName="ListaUsuarios" />
 						</h:commandLink>
 					</f:facet>
 
@@ -82,6 +82,9 @@
 					<p:column headerText="Nombre de Usuario" sortBy="#{item.username}"
 						filterBy="#{item.username}" filterMatchMode="contains">
 						<p:outputLabel value="#{item.username}" />
+					</p:column>
+					<p:column headerText="Roles" >
+						<p:outputLabel value="#{usuarioListController.getRoles(item)}" />
 					</p:column>
 				</p:dataTable>
 			</p:panel>

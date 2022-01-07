@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
-        xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui" 
-        xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:pe="http://primefaces.org/ui/extensions">
+        xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui"
+        xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:pe="http://primefaces.org/ui/extensions">
 
 <h:head>
         <title>Articulos</title>
@@ -15,12 +14,25 @@
 </h:head>
 
 <h:body>
-        <i id="customheader" class="fa fa-barcode" style="display: none"></i>
+        <i id="customheader" class="fa fa-barcode" style="display: none">
+                <div>
+                        <p:commandButton value="Descargar" icon="pi pi-arrow-down" styleClass="btn btn-primary btn-xs">
+                                <p:fileDownload
+                                        value="#{fileDownloaderComponent.downloadContent(documentPreviewDialogController.doc)}" />
+                        </p:commandButton>
+        
+                </div>
+        </i>
 
-        <h:form>
-                <pe:documentViewer rendered="#{documentPreviewDialogController.renderPdf}" height="550" value="#{documentPreviewDialogController.streamedContent}"
-                        download="#{documentPreviewDialogController.fileName}"  />
-                <p:graphicImage rendered="#{documentPreviewDialogController.renderImage}" value="#{documentPreviewDialogController.streamedContent}"/>
+        <h:form id="previewForm">
+                <div>
+
+                        <pe:documentViewer rendered="#{documentPreviewDialogController.renderPdf}" height="535"
+                                value="#{documentPreviewDialogController.streamedContent}"
+                                download="#{documentPreviewDialogController.doc.fileName}" />
+                        <p:graphicImage rendered="#{documentPreviewDialogController.renderImage}"
+                                value="#{documentPreviewDialogController.streamedContent}" stream="false" />
+                </div>
         </h:form>
 </h:body>
 

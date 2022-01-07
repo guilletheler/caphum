@@ -27,8 +27,8 @@
 				header="LISTA DE DOCUMENTOS">
 
 				<p:menubar>
-					<p:menuitem value="Nuevo DOCUMENTO" icon="fa fa-plus" outcome="DocumentoEdit">
-					</p:menuitem>
+					<p:menuitem value="Nuevo DOCUMENTO" icon="fa fa-plus"
+						action="#{documentoListController.crearDocumento}" update="datatable" />
 				</p:menubar>
 
 				<p:dataTable id="datatable" value="#{documentoListController.lazyDataModel}" widgetVar="documentoTable"
@@ -36,68 +36,128 @@
 					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exportar}"
 					currentPageReportTemplate="{totalRecords} [ {currentPage} / {totalPages} ]"
 					emptyMessage="No se encontraron elementos" paginator="true" multiViewState="true"
-					sortMode="multiple" sortBy="#{documentoListController.defaultSortBy}" rows="20"
+					sortMode="multiple" sortBy="#{documentoListController.defaultSortBy}" rows="20" editable="true"
 					rowsPerPageTemplate="20,50,100" lazy="true" reflow="true" style="width:100%">
 
 					<p:ajax event="filter" global="false" />
+					<p:ajax event="rowEdit" listener="#{documentoListController.onRowEdit}" update="messages" />
+					<p:ajax event="rowEditCancel" listener="#{documentoListController.onRowCancel}" update="messages" />
+
 					<f:facet name="{Exportar}">
 						<p:outputLabel value="   EXPORTAR: " />
 						<h:commandLink styleClass="tableColumnHeader" title="Exportar a XLS">
 							<i class="fa fa-fw fa-file-excel-o" />
-							<p:dataExporter type="xlsx" target="datatable" fileName="Lista" />
+							<p:dataExporter type="xlsx" target="datatable" fileName="ListaDocumentos"
+								postProcessor="#{tableExporterUtilsComponent.acomodaXls}" />
 						</h:commandLink>
 					</f:facet>
 
-					<p:column headerText="Acción" exportable="false" style="width: 120px">
-						<p:button title="Editar" class="btn btn-success btn-xs" icon="fa fa-fw fa fa-edit"
-							outcome="DocumentoEdit.xhtml">
-							<f:param name="id" value="#{item.id}" />
-						</p:button>
+					<p:column visible="#{usuarioService.inRole('SYSADMIN')}" headerText="ID" style="width: 80px"
+						sortBy="#{item.id}" filterBy="#{item.id}" filterMatchMode="contains">
+						<p:outputLabel value="#{item.id}" />
+					</p:column>
+					<p:column headerText="CODIGO" style="width: 80px" sortBy="#{item.codigo}" filterBy="#{item.codigo}"
+						filterMatchMode="contains">
+						<p:cellEditor>
+							<f:facet name="output">
+								<p:outputLabel value="#{item.codigo}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputNumber value="#{item.codigo}" decimalPlaces="0" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column headerText="NOMBRE" sortBy="#{item.nombre}" filterBy="#{item.nombre}"
+						filterMatchMode="contains">
+						<p:cellEditor>
+							<f:facet name="output">
+								<p:outputLabel value="#{item.nombre}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{item.nombre}" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column headerText="FILENAME" sortBy="#{item.fileName}" filterBy="#{item.fileName}"
+						filterMatchMode="contains">
+						<p:cellEditor>
+							<f:facet name="output">
+								<p:outputLabel value="#{item.fileName}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText id="fileName" value="#{item.fileName}" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column headerText="CONTENIDO" style="width: 120px" sortBy="#{item.contentType}"
+						filterBy="#{item.contentType}" filterMatchMode="contains">
+						<p:cellEditor>
+							<f:facet name="output">
+								<p:outputLabel value="#{item.contentType}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:fileUpload value="#{item.uploadedFile}" mode="simple" skinSimple="true" auto="true"
+									update="fileName" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column style="width:5rem">
+						<p:commandButton title="Previsualizar" icon="fa fa-search" global="false"
+							class="btn btn-primary btn-xs" action="#{documentPreviewDialogController.preview(item)}">
+						</p:commandButton>
+					</p:column>
+					<p:column headerText="CREADO" style="width: 90px" sortBy="#{item.fechaCreacion}"
+						filterBy="#{item.fechaCreacion}" filterMatchMode="contains">
+						<p:cellEditor>
+							<f:facet name="output">
+								<p:outputLabel value="#{item.fechaCreacion}">
+									<f:convertDateTime timeZone="America/Buenos_Aires" type="date"
+										pattern="dd/MM/yyyy" />
+								</p:outputLabel>
+							</f:facet>
+							<f:facet name="input">
+								<p:datePicker value="#{item.fechaCreacion}" locale="es" monthNavigator="true" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column headerText="VENCE" style="width: 90px" sortBy="#{item.fechaVencimiento}"
+						filterBy="#{item.fechaVencimiento}" filterMatchMode="contains">
+						<p:cellEditor>
+							<f:facet name="output">
+								<p:outputLabel value="#{item.fechaVencimiento}">
+									<f:convertDateTime timeZone="America/Buenos_Aires" type="date"
+										pattern="dd/MM/yyyy" />
+								</p:outputLabel>
+							</f:facet>
+							<f:facet name="input">
+								<p:datePicker value="#{item.fechaVencimiento}" locale="es" monthNavigator="true" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column headerText="ELIMINAR" style="width: 90px" sortBy="#{item.fechaEliminacion}"
+						filterBy="#{item.fechaEliminacion}" filterMatchMode="contains">
+						<p:cellEditor>
+							<f:facet name="output">
+								<p:outputLabel value="#{item.fechaEliminacion}">
+									<f:convertDateTime timeZone="America/Buenos_Aires" type="date"
+										pattern="dd/MM/yyyy" />
+								</p:outputLabel>
+							</f:facet>
+							<f:facet name="input">
+								<p:datePicker value="#{item.fechaEliminacion}" locale="es" monthNavigator="true" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column style="width:5rem">
 						<p:commandButton actionListener="#{documentoListController.borrarDocumento(item)}"
 							update="datatable" class="btn btn-danger btn-xs" icon="fa fa-fw fa fa-trash-o"
 							title="Eliminar">
 							<p:confirm header="Eliminar Documento" message="¿Está seguro de eliminar la entidad?"
 								icon="ui-icon-alert" />
 						</p:commandButton>
-						<p:commandButton title="Previsualizar" icon="fa fa-search" global="false"
-							class="btn btn-primary btn-xs"
-							action="#{documentPreviewDialogController.preview(item)}">
-						</p:commandButton>
 					</p:column>
-
-					<p:column visible="#{sessionMB.inRole('SYSADMIN')}" headerText="ID" style="width: 80px"
-						sortBy="#{item.id}" filterBy="#{item.id}" filterMatchMode="contains">
-						<p:outputLabel value="#{item.id}" />
-					</p:column>
-					<p:column headerText="CODIGO" style="width: 80px" sortBy="#{item.codigo}" filterBy="#{item.codigo}"
-						filterMatchMode="contains">
-						<p:outputLabel value="#{item.codigo}" />
-					</p:column>
-					<p:column headerText="NOMBRE" sortBy="#{item.nombre}" filterBy="#{item.nombre}"
-						filterMatchMode="contains">
-						<p:outputLabel value="#{item.nombre}" />
-					</p:column>
-					<p:column headerText="FILENAME" sortBy="#{item.fileName}" filterBy="#{item.fileName}"
-						filterMatchMode="contains">
-						<p:outputLabel value="#{item.fileName}" />
-					</p:column>
-					<p:column headerText="CREADO" style="width: 90px" sortBy="#{item.fechaCreacion}"
-						filterBy="#{item.fechaCreacion}" filterMatchMode="contains">
-						<p:outputLabel value="#{item.fechaCreacion}">
-							<f:convertDateTime timeZone="America/Buenos_Aires" type="date" pattern="dd/MM/yyyy" />
-						</p:outputLabel>
-					</p:column>
-					<p:column headerText="VENCE" style="width: 90px" sortBy="#{item.fechaVencimiento}"
-						filterBy="#{item.fechaVencimiento}" filterMatchMode="contains">
-						<p:outputLabel value="#{item.fechaVencimiento}">
-							<f:convertDateTime timeZone="America/Buenos_Aires" type="date" pattern="dd/MM/yyyy" />
-						</p:outputLabel>
-					</p:column>
-					<p:column headerText="ELIMINAR" style="width: 90px" sortBy="#{item.fechaEliminacion}"
-						filterBy="#{item.fechaEliminacion}" filterMatchMode="contains">
-						<p:outputLabel value="#{item.fechaEliminacion}">
-							<f:convertDateTime timeZone="America/Buenos_Aires" type="date" pattern="dd/MM/yyyy" />
-						</p:outputLabel>
+					<p:column style="width:6rem">
+						<p:rowEditor editTitle="Editar" cancelTitle="Cancelar" saveTitle="Guardar" />
 					</p:column>
 				</p:dataTable>
 			</p:panel>

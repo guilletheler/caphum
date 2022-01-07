@@ -6,7 +6,7 @@
 	xmlns:adm="http://github.com/adminfaces" template="#{layoutMB.template}">
 
 	<ui:define name="metadata">
-		<ui:param name="title" value="Lista de Personas" />
+		<ui:param name="title" value="Lista de Requerimientos de personal" />
 		<!-- Automatic create breadCrumb and page title when param 'title' is provided. -->
 		<style type="text/css">
 			.ui-datatable .ui-datatable-header {
@@ -16,26 +16,26 @@
 	</ui:define>
 
 	<ui:define name="description">
-		Personas del sistema.
+		RequerimientoDePersonales del sistema.
 	</ui:define>
 
 	<ui:define name="body">
 		<h:form>
 
 			<p:panel styleClass="card box-solid box-primary" class="box box-solid box-primary"
-				header="LISTA DE PERSONAS">
+				header="LISTA DE REQUERIMIENTOS DE PERSONAL">
 
 				<p:menubar>
-					<p:menuitem value="Nuevo PERSONA" icon="fa fa-plus" outcome="PersonaEdit">
+					<p:menuitem value="Nuevo Requerimiento de Personal" icon="fa fa-plus" outcome="RequerimientoDePersonalEdit">
 					</p:menuitem>
 				</p:menubar>
 
-				<p:dataTable id="datatable" value="#{personaListController.lazyDataModel}" widgetVar="personaTable"
+				<p:dataTable id="datatable" value="#{requerimientoDePersonalListController.lazyDataModel}" widgetVar="requerimientoDePersonalTable"
 					var="item"
 					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exportar}"
 					currentPageReportTemplate="{totalRecords} [ {currentPage} / {totalPages} ]"
 					emptyMessage="No se encontraron elementos" paginator="true" multiViewState="true"
-					sortMode="multiple" sortBy="#{personaListController.defaultSortBy}" rows="20"
+					sortMode="multiple" sortBy="#{requerimientoDePersonalListController.defaultSortBy}" rows="20"
 					rowsPerPageTemplate="20,50,100" lazy="true" reflow="true" style="width:100%">
 
 					<p:ajax event="filter" global="false" />
@@ -43,20 +43,20 @@
 						<p:outputLabel value="   EXPORTAR: " />
 						<h:commandLink styleClass="tableColumnHeader" title="Exportar a XLS">
 							<i class="fa fa-fw fa-file-excel-o" />
-							<p:dataExporter type="xlsx" target="datatable" fileName="ListaPersonas"
+							<p:dataExporter type="xlsx" target="datatable" fileName="ListaRequerimientoDePersonales"
 								postProcessor="#{tableExporterUtilsComponent.acomodaXls}" />
 						</h:commandLink>
 					</f:facet>
 
 					<p:column headerText="Acción" exportable="false" style="width: 80px">
-						<p:button title="Editar" class="btn btn-success btn-xs" icon="fa fa-fw fa fa-edit"
-							outcome="PersonaEdit.xhtml" style="width: 48%">
+						<p:button title="Editar" class="btn btn-success btn-xs" icon="fa fa-fw fa fa-edit" style="width: 48%"
+							outcome="RequerimientoDePersonalEdit.xhtml">
 							<f:param name="id" value="#{item.id}" />
 						</p:button>
-						<p:commandButton actionListener="#{personaListController.borrarPersona(item)}"
+						<p:commandButton actionListener="#{requerimientoDePersonalListController.borrarRequerimientoDePersonal(item)}" style="width: 48%"
 							update="datatable" class="btn btn-danger btn-xs" icon="fa fa-fw fa fa-trash-o"
-							title="Eliminar" style="width: 48%">
-							<p:confirm header="Eliminar Persona" message="¿Está seguro de eliminar la entidad?"
+							title="Eliminar">
+							<p:confirm header="Eliminar RequerimientoDePersonal" message="¿Está seguro de eliminar la entidad?"
 								icon="ui-icon-alert" />
 						</p:commandButton>
 					</p:column>
@@ -65,61 +65,52 @@
 						sortBy="#{item.id}" filterBy="#{item.id}" filterMatchMode="contains">
 						<p:outputLabel value="#{item.id}" />
 					</p:column>
-					<p:column headerText="CODIGO" style="width: 70px" sortBy="#{item.codigo}" filterBy="#{item.codigo}"
+					<p:column headerText="PUESTO" sortBy="#{item.puesto.nombre}" filterBy="#{item.puesto.nombre}"
 						filterMatchMode="contains">
-						<p:outputLabel value="#{item.codigo}" />
+						<p:outputLabel value="#{item.puesto.nombre}" />
 					</p:column>
-					<p:column headerText="NOMBRE" sortBy="#{item.nombre}" filterBy="#{item.nombre}"
-						filterMatchMode="contains">
-						<p:outputLabel value="#{item.nombre}" />
+					<p:column headerText="INTERESADO" style="width: 200px" sortBy="#{item.interesado.nombre}"
+						filterBy="#{item.interesado.nombre}" filterMatchMode="contains">
+						<p:outputLabel value="#{item.interesado.nombre}" />
 					</p:column>
-
-					<p:column headerText="NAC" sortBy="#{item.fechaNacimiento}" style="width: 85px"
-						filterBy="#{item.fechaNacimiento}" filterMatchMode="contains">
-						<p:outputLabel value="#{item.fechaNacimiento}">
+					<p:column headerText="CREADO" style="width: 150px" sortBy="#{item.fechaCreacion}"
+						filterBy="#{item.fechaCreacion}" filterMatchMode="contains">
+						<p:outputLabel value="#{item.fechaCreacion}">
 							<f:convertDateTime timeZone="America/Buenos_Aires" type="date" pattern="dd/MM/yyyy" />
 						</p:outputLabel>
 					</p:column>
-					<p:column headerText="EDAD" sortBy="#{item.edad}" style="width: 85px"
-						filterBy="#{item.edad}" filterMatchMode="contains">
-						<p:outputLabel value="#{item.edad}">
+					<p:column headerText="INICIO" style="width: 150px" sortBy="#{item.inicio}" filterBy="#{item.inicio}"
+						filterMatchMode="contains">
+						<p:outputLabel value="#{item.inicio}">
+							<f:convertDateTime timeZone="America/Buenos_Aires" type="date" pattern="dd/MM/yyyy" />
 						</p:outputLabel>
 					</p:column>
-					<p:column headerText="TD" style="width: 50px" sortBy="#{item.tipoDocumento}"
-						filterBy="#{item.tipoDocumento}" filterMatchMode="contains">
-						<p:outputLabel value="#{item.tipoDocumento}" />
+					<p:column headerText="FIN" style="width: 150px" sortBy="#{item.finalizacion}"
+						filterBy="#{item.finalizacion}" filterMatchMode="contains">
+						<p:outputLabel value="#{item.finalizacion}">
+							<f:convertDateTime timeZone="America/Buenos_Aires" type="date" pattern="dd/MM/yyyy" />
+						</p:outputLabel>
 					</p:column>
-					<p:column headerText="NRO DOC" style="width: 110px" sortBy="#{item.nroDocumento}"
-						filterBy="#{item.nroDocumento}" filterMatchMode="contains">
-						<p:outputLabel value="#{item.nroDocumento}" />
+					<p:column headerText="Q" style="width: 70px" sortBy="#{item.cantidadPuestos}"
+						filterBy="#{item.cantidadPuestos}" filterMatchMode="contains">
+						<p:outputLabel value="#{item.cantidadPuestos}" />
 					</p:column>
-					<p:column headerText="DOMICILIO" sortBy="#{item.domicilio}" filterBy="#{item.domicilio}"
+					<p:column headerText="ESTADO" style="width: 150px" sortBy="#{item.estado}" filterBy="#{item.estado}"
 						filterMatchMode="contains">
-						<p:outputLabel value="#{item.domicilio}" />
+						<p:outputLabel value="#{item.estado}" />
 					</p:column>
-					<p:column headerText="APTITUDES" sortBy="#{item.aptitudes}" filterBy="#{item.aptitudes}"
-						filterMatchMode="contains">
-						<p:outputLabel value="#{item.aptitudes}" />
-					</p:column>
-					<p:column headerText="CP" style="width: 70px" sortBy="#{item.localidad.codigoPostal}"
+					<p:column headerText="CP" style="width: 50px" sortBy="#{item.localidad.codigoPostal}"
 						filterBy="#{item.localidad.codigoPostal}" filterMatchMode="contains">
 						<p:outputLabel value="#{item.localidad.codigoPostal}" />
 					</p:column>
-					<p:column headerText="LOCALIDAD" style="width: 150px" sortBy="#{item.localidad.nombre}"
+					<p:column headerText="LOCALIDAD" style="width: 120px" sortBy="#{item.localidad.nombre}"
 						filterBy="#{item.localidad.nombre}" filterMatchMode="contains">
 						<p:outputLabel value="#{item.localidad.nombre}" />
 					</p:column>
-					<p:column headerText="PROVINCIA" style="width: 100px" sortBy="#{item.localidad.provincia.nombre}"
+					<p:column headerText="PROVINCIA" style="width: 120px" sortBy="#{item.localidad.provincia.nombre}"
 						filterBy="#{item.localidad.provincia.nombre}" filterMatchMode="contains">
 						<p:outputLabel value="#{item.localidad.provincia.nombre}" />
 					</p:column>
-					<p:column headerText="MOD" sortBy="#{item.ultimaModificacion}" style="width: 85px"
-					filterBy="#{item.ultimaModificacion}" filterMatchMode="contains">
-					<p:outputLabel value="#{item.ultimaModificacion}">
-						<f:convertDateTime timeZone="America/Buenos_Aires" type="date" pattern="dd/MM/yyyy" />
-					</p:outputLabel>
-				</p:column>
-
 				</p:dataTable>
 			</p:panel>
 			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-solid box-danger">

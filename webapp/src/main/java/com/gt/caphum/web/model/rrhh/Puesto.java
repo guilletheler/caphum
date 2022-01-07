@@ -1,18 +1,18 @@
 package com.gt.caphum.web.model.rrhh;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Basic;
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.gt.caphum.web.model.CodigoNombre;
@@ -43,19 +43,33 @@ public class Puesto extends CodigoNombre implements IWithIntegerId, IWithObserva
     @Basic(fetch = FetchType.LAZY)
     String observaciones;
 
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @Getter(AccessLevel.NONE)
-    @ElementCollection
-	@CollectionTable(name = "aptitudes_requeridas_puesto", joinColumns = @JoinColumn(name = "puesto_id"))
-	@Column(name = "aptitud")
-	private List<String> aptitudesRequeridas;
+    @Column(length = 10000)
+    private String aptitudesRequeridas;
 
-    @ToString.Exclude
+    @Column(length = 10000)
+    private String aptitudesDeseadas;
+
+    @Column(length = 10000)
+    String horarios;
+
+    @ManyToOne
+    Puesto puestoSuperior;
+
+    @Column(length = 10000)
+    @Basic(fetch = FetchType.LAZY)
+    String descripcion;
+
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @Getter(AccessLevel.NONE)
-    @ElementCollection
-	@CollectionTable(name = "aptitudes_deseadas_puesto", joinColumns = @JoinColumn(name = "puesto_id"))
-	@Column(name = "aptitud")
-	private List<String> aptitudesDeseadas;
+    @OneToMany(mappedBy = "puestoSuperior")
+    List<Puesto> puestosSubordinados = new ArrayList<>();
+
+    public List<Puesto> getPuestosSubordinados() {
+        if (puestosSubordinados == null) {
+            puestosSubordinados = new ArrayList<>();
+        }
+        return puestosSubordinados;
+    }
+
 }

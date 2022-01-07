@@ -1,4 +1,4 @@
-package com.gt.caphum.web.bean;
+package com.gt.caphum.web.components;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -19,7 +19,7 @@ import com.gt.toolbox.spb.webapps.commons.infra.utils.Utils;
 
 @Named
 @ViewScoped
-public class TableExporterUtilsMB implements Serializable {
+public class TableExporterUtilsComponents implements Serializable {
 	/**
 	 * 
 	 */

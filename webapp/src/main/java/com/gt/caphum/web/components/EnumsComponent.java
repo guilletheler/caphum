@@ -1,11 +1,10 @@
-package com.gt.caphum.web.bean;
+package com.gt.caphum.web.components;
 
-import javax.ejb.Singleton;
-import javax.inject.Named;
-
-import com.gt.caphum.web.model.rrhh.EstadoBusqueda;
+import com.gt.caphum.web.model.rrhh.EstadoRequerimientoDePersonal;
 import com.gt.caphum.web.model.rrhh.EstadoEvaluacion;
 import com.gt.caphum.web.model.usuarios.UserRol;
+
+import org.springframework.stereotype.Component;
 
 /**
  * Clase que devuelve los valores de los enums
@@ -13,16 +12,15 @@ import com.gt.caphum.web.model.usuarios.UserRol;
  * @author PortalTheler
  *
  */
-@Named
-@Singleton
-public class EnumsMB {
+@Component
+public class EnumsComponent {
 
 	public UserRol[] getRoles() {
 		return UserRol.values();
 	}
 
-	public EstadoBusqueda[] getEstadoBusqueda() {
-		return EstadoBusqueda.values();
+	public EstadoRequerimientoDePersonal[] getEstadoRequerimientoDePersonal() {
+		return EstadoRequerimientoDePersonal.values();
 	}
 
 	public EstadoEvaluacion[] getEstadoEvaluacion() {

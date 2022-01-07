@@ -7,14 +7,12 @@ import java.util.Objects;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.gt.caphum.web.bean.SessionMB;
 import com.gt.caphum.web.model.usuarios.Usuario;
-import com.gt.caphum.web.repo.sistema.UsuarioRepo;
+import com.gt.caphum.web.service.sistema.UsuarioService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -29,10 +27,7 @@ public class CambioPassController implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Autowired
-	UsuarioRepo usuarioRepo;
-
-	@Inject
-	SessionMB sessionMB;
+	UsuarioService usuarioService;
 
 	@Getter
 	@Setter
@@ -52,13 +47,13 @@ public class CambioPassController implements Serializable {
 
 	public String save() {
 
-		Usuario cur = sessionMB.getCurrentUser();
+		Usuario cur = usuarioService.getCurrentUser();
 
 		if (!Objects.equals(newpasswd1, newpasswd2)) {
 			addDetailMessage("La contraseña actual es incorrecta", FacesMessage.SEVERITY_ERROR);
 		} else if (cur.equalPasswd(getCurpasswd())) {
 			cur.setAndEncryptPassword(newpasswd1);
-			usuarioRepo.save(cur);
+			usuarioService.getRepo().save(cur);
 			addDetailMessage("Contraseña cambiada exitosamente");
 			return "/index.xhtml?faces-redirect=true";
 		} else {

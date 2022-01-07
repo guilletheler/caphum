@@ -13,7 +13,7 @@ import com.gt.caphum.web.model.sistema.AppParam;
 import com.gt.caphum.web.model.usuarios.LogEntry;
 import com.gt.caphum.web.model.usuarios.Usuario;
 import com.gt.caphum.web.repo.sistema.LogEntryRepo;
-import com.gt.caphum.web.service.QueryHelper;
+import com.gt.toolbox.spb.webapps.commons.infra.service.QueryHelper;
 
 import lombok.Getter;
 import lombok.extern.java.Log;

@@ -69,7 +69,7 @@
 						</p:commandButton>
 					</p:column>
 					
-					<p:column visible="#{sessionMB.inRole('SYSADMIN')}" headerText="ID" style="width: 150px"
+					<p:column visible="#{usuarioService.inRole('SYSADMIN')}" headerText="ID" style="width: 150px"
 	sortBy="#{item.id}"
 	filterBy="#{item.id}" filterMatchMode="contains">
 	<p:outputLabel value="#{item.id}"/>

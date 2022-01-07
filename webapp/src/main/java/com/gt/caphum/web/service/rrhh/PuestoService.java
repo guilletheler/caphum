@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import com.gt.toolbox.spb.webapps.commons.infra.datamodel.SelectableLazyDMFiller;
 import com.gt.caphum.web.model.rrhh.Puesto;
 import com.gt.caphum.web.repo.rrhh.PuestoRepo;
-import com.gt.caphum.web.service.QueryHelper;
+import com.gt.toolbox.spb.webapps.commons.infra.service.QueryHelper;
 
 import lombok.Getter;
 
