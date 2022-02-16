@@ -36,7 +36,7 @@
 					currentPageReportTemplate="{totalRecords} [ {currentPage} / {totalPages} ]"
 					emptyMessage="No se encontraron elementos" paginator="true" multiViewState="true"
 					sortMode="multiple" sortBy="#{personaListController.defaultSortBy}" rows="20"
-					rowsPerPageTemplate="20,50,100" lazy="true" reflow="true" style="width:100%">
+					rowsPerPageTemplate="20,50,100" lazy="true" style="width:100%">
 
 					<p:ajax event="filter" global="false" />
 					<f:facet name="{Exportar}">
@@ -70,7 +70,7 @@
 						<p:outputLabel value="#{item.codigo}" />
 					</p:column>
 					<p:column headerText="NOMBRE" sortBy="#{item.nombre}" filterBy="#{item.nombre}"
-						filterMatchMode="contains">
+						filterMatchMode="contains" style="width: 250px">
 						<p:outputLabel value="#{item.nombre}" />
 					</p:column>
 
@@ -80,8 +80,8 @@
 							<f:convertDateTime timeZone="America/Buenos_Aires" type="date" pattern="dd/MM/yyyy" />
 						</p:outputLabel>
 					</p:column>
-					<p:column headerText="EDAD" sortBy="#{item.edad}" style="width: 85px"
-						filterBy="#{item.edad}" filterMatchMode="contains">
+					<p:column headerText="EDAD" sortBy="#{item.edad}" style="width: 85px" filterBy="#{item.edad}"
+						filterMatchMode="contains">
 						<p:outputLabel value="#{item.edad}">
 						</p:outputLabel>
 					</p:column>
@@ -89,17 +89,29 @@
 						filterBy="#{item.tipoDocumento}" filterMatchMode="contains">
 						<p:outputLabel value="#{item.tipoDocumento}" />
 					</p:column>
-					<p:column headerText="NRO DOC" style="width: 110px" sortBy="#{item.nroDocumento}"
+					<p:column headerText="NRO DOC" style="width: 100px" sortBy="#{item.nroDocumento}"
 						filterBy="#{item.nroDocumento}" filterMatchMode="contains">
 						<p:outputLabel value="#{item.nroDocumento}" />
 					</p:column>
 					<p:column headerText="DOMICILIO" sortBy="#{item.domicilio}" filterBy="#{item.domicilio}"
-						filterMatchMode="contains">
+						filterMatchMode="contains" style="width: 200px">
 						<p:outputLabel value="#{item.domicilio}" />
 					</p:column>
-					<p:column headerText="APTITUDES" sortBy="#{item.aptitudes}" filterBy="#{item.aptitudes}"
+					<p:column headerText="PUESTO ACTUAL" sortBy="#{item.puestoActual.nombre}" filterBy="#{item.puestoActual.nombre}" style="width: 200px"
 						filterMatchMode="contains">
-						<p:outputLabel value="#{item.aptitudes}" />
+						<p:outputLabel value="#{item.puestoActual.nombre}" />
+					</p:column>
+					<p:column headerText="APTITUDES" sortBy="#{item.aptitudesStr}" filterBy="#{item.aptitudesStr}"
+						filterMatchMode="contains" style="width: 250px">
+						<p:outputLabel value="#{item.aptitudesStr}" />
+					</p:column>
+					<p:column headerText="EST.FORM." sortBy="#{item.estudiosFormalesStr}" filterBy="#{item.estudiosFormalesStr}"
+						filterMatchMode="contains"  style="width: 500px">
+						<p:outputLabel value="#{item.estudiosFormalesStr}" />
+					</p:column>
+					<p:column headerText="EST_NO_FORM" sortBy="#{item.estudiosNoFormalesStr}" filterBy="#{item.estudiosNoFormalesStr}"
+						filterMatchMode="contains" style="width: 300px">
+						<p:outputLabel value="#{item.estudiosNoFormalesStr}" />
 					</p:column>
 					<p:column headerText="CP" style="width: 70px" sortBy="#{item.localidad.codigoPostal}"
 						filterBy="#{item.localidad.codigoPostal}" filterMatchMode="contains">
@@ -114,11 +126,11 @@
 						<p:outputLabel value="#{item.localidad.provincia.nombre}" />
 					</p:column>
 					<p:column headerText="MOD" sortBy="#{item.ultimaModificacion}" style="width: 85px"
-					filterBy="#{item.ultimaModificacion}" filterMatchMode="contains">
-					<p:outputLabel value="#{item.ultimaModificacion}">
-						<f:convertDateTime timeZone="America/Buenos_Aires" type="date" pattern="dd/MM/yyyy" />
-					</p:outputLabel>
-				</p:column>
+						filterBy="#{item.ultimaModificacion}" filterMatchMode="contains">
+						<p:outputLabel value="#{item.ultimaModificacion}">
+							<f:convertDateTime timeZone="America/Buenos_Aires" type="date" pattern="dd/MM/yyyy" />
+						</p:outputLabel>
+					</p:column>
 
 				</p:dataTable>
 			</p:panel>

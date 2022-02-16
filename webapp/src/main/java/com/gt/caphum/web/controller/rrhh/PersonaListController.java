@@ -49,7 +49,7 @@ public class PersonaListController implements Serializable {
 	}
 	
 	public SortMeta getDefaultSortBy() {
-		return SortMeta.builder().field("id").order(SortOrder.ASCENDING).build();
+		return SortMeta.builder().field("codigo").order(SortOrder.ASCENDING).build();
 	}
 }
 

@@ -8,8 +8,11 @@ import static com.github.adminfaces.template.util.Assert.has;
 import static com.gt.toolbox.spb.webapps.commons.infra.utils.Utils.addDetailMessage;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
@@ -19,18 +22,24 @@ import javax.inject.Named;
 import javax.validation.ValidationException;
 
 import com.gt.caphum.web.controller.DocumentableHelper;
-import com.gt.caphum.web.model.rrhh.RequerimientoDePersonal;
 import com.gt.caphum.web.model.rrhh.Documento;
-import com.gt.caphum.web.model.rrhh.EstadoRequerimientoDePersonal;
 import com.gt.caphum.web.model.rrhh.EstadoEvaluacion;
+import com.gt.caphum.web.model.rrhh.EstadoRequerimientoDePersonal;
 import com.gt.caphum.web.model.rrhh.Evaluacion;
+import com.gt.caphum.web.model.rrhh.Persona;
+import com.gt.caphum.web.model.rrhh.RequerimientoDePersonal;
 import com.gt.caphum.web.repo.localizacion.LocalidadRepo;
-import com.gt.caphum.web.service.rrhh.RequerimientoDePersonalService;
 import com.gt.caphum.web.service.rrhh.DocumentoService;
+import com.gt.caphum.web.service.rrhh.PersonaService;
+import com.gt.caphum.web.service.rrhh.RequerimientoDePersonalService;
 import com.gt.toolbox.spb.webapps.commons.infra.datamodel.CollectionLazyDataModel;
 
+import org.hibernate.LazyInitializationException;
 import org.omnifaces.util.Faces;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.ToggleEvent;
 import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.Visibility;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import lombok.Getter;
@@ -39,18 +48,21 @@ import lombok.Setter;
 @Named
 @ViewScoped
 public class RequerimientoDePersonalEditController implements Serializable {
-	
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	@Inject
 	RequerimientoDePersonalService requerimientoDePersonalService;
-	
+
 	@Autowired
 	private DocumentoService documentoService;
-	
+
+	@Autowired
+	private PersonaService personaService;
+
 	@Autowired
 	private LocalidadRepo localidadRepo;
 
@@ -64,12 +76,18 @@ public class RequerimientoDePersonalEditController implements Serializable {
 
 	@Getter
 	@Setter
-	List<Documento> documentosEliminados;
+	Map<Evaluacion, List<Documento>> documentosDeEvaluacionesEliminados;
 
 	@Getter
 	@Setter
 	private DocumentableHelper documentableHelper;
-	
+
+	@Getter
+	private DocumentableHelper evaluacionDocumentableHelper;
+
+	@Getter
+	private DocumentableHelper personaDocumentableHelper;
+
 	@Getter
 	@Setter
 	LazyDataModel<Evaluacion> evaluaciones;
@@ -79,7 +97,8 @@ public class RequerimientoDePersonalEditController implements Serializable {
 			return;
 		}
 		if (has(id)) {
-			requerimientoDePersonal = requerimientoDePersonalService.getRepo().findById(id).orElseGet(() -> new RequerimientoDePersonal());
+			requerimientoDePersonal = requerimientoDePersonalService.getRepo().findById(id)
+					.orElseGet(() -> new RequerimientoDePersonal());
 		} else {
 			requerimientoDePersonal = new RequerimientoDePersonal();
 		}
@@ -89,9 +108,15 @@ public class RequerimientoDePersonalEditController implements Serializable {
 
 		requerimientoDePersonal.getDocumentos().size();
 
-		documentableHelper = new DocumentableHelper(requerimientoDePersonal, documentoService.getRepo().nextCodigo());
+		documentableHelper = DocumentableHelper.builder().documentable(requerimientoDePersonal)
+				.nextCodigo(documentoService.getRepo().nextCodigo()).build();
 
-		evaluaciones = new CollectionLazyDataModel<Evaluacion>(Evaluacion.class, requerimientoDePersonal.getEvaluaciones() , "id");
+		requerimientoDePersonal.getEvaluaciones().forEach(e -> e.getDocumentos().size());
+
+		evaluaciones = new CollectionLazyDataModel<Evaluacion>(Evaluacion.class,
+				requerimientoDePersonal.getEvaluaciones(), "id");
+
+		documentosDeEvaluacionesEliminados = new HashMap<>();
 	}
 
 	private void setDefaultValues(RequerimientoDePersonal requerimientoDePersonal) {
@@ -109,7 +134,7 @@ public class RequerimientoDePersonalEditController implements Serializable {
 		Severity severity = FacesMessage.SEVERITY_INFO;
 
 		try {
-			requerimientoDePersonalService.save(requerimientoDePersonal, documentableHelper.getDocumentosEliminados());
+			requerimientoDePersonalService.save(requerimientoDePersonal, documentableHelper.getDocumentosEliminados(), documentosDeEvaluacionesEliminados);
 
 			ret = "RequerimientoDePersonalesList?faces-redirect=true";
 		} catch (ValidationException vex) {
@@ -138,4 +163,52 @@ public class RequerimientoDePersonalEditController implements Serializable {
 		requerimientoDePersonal.getEvaluaciones().add(evaluacion);
 	}
 
+	public void onEvaluacionEdited(SelectEvent<Evaluacion> event) {
+		Evaluacion evaluacion = event.getObject();
+		if (evaluacion != null) {
+			if (evaluacion.getRequerimientoDePersonal() == null) {
+				evaluacion.setRequerimientoDePersonal(requerimientoDePersonal);
+				requerimientoDePersonal.getEvaluaciones().add(evaluacion);
+			}
+		}
+	}
+
+	public void eliminarEvaluacion(Evaluacion evaluacion) {
+		requerimientoDePersonal.getEvaluaciones().remove(evaluacion);
+	}
+
+	public void onEvaluacionesTableRowToggle(ToggleEvent event) {
+
+		if (event.getVisibility() == Visibility.VISIBLE) {
+			Evaluacion evaluacion = (Evaluacion) event.getData();
+			if (evaluacion != null) {
+
+				evaluacionDocumentableHelper = DocumentableHelper.builder().documentable(evaluacion)
+						.codeGen(documentableHelper).build();
+				if (evaluacion.getPersona() != null) {
+					Persona per = evaluacion.getPersona();
+					try {
+						per.getDocumentos().size();
+					} catch (LazyInitializationException ex) {
+						per = personaService.getRepo().findById(per.getId()).orElse(null);
+						per.getDocumentos().size();
+					}
+					personaDocumentableHelper = DocumentableHelper.builder()
+							.documentable(per)
+							.codeGen(documentableHelper)
+							.readOnly(true)
+							.build();
+				}
+			}
+		}
+	}
+
+	public void finalizaEdicionEvaluacion(Evaluacion item) {
+
+		if(!documentosDeEvaluacionesEliminados.containsKey(item)) {
+			documentosDeEvaluacionesEliminados.put(item, new ArrayList<>());
+		}
+
+		documentosDeEvaluacionesEliminados.get(item).addAll(evaluacionDocumentableHelper.getDocumentosEliminados());
+	}
 }

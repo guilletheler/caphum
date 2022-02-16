@@ -36,7 +36,7 @@
 					currentPageReportTemplate="{totalRecords} [ {currentPage} / {totalPages} ]"
 					emptyMessage="No se encontraron elementos" paginator="true" multiViewState="true"
 					sortMode="multiple" sortBy="#{requerimientoDePersonalListController.defaultSortBy}" rows="20"
-					rowsPerPageTemplate="20,50,100" lazy="true" reflow="true" style="width:100%">
+					rowsPerPageTemplate="20,50,100" lazy="true" style="width:100%">
 
 					<p:ajax event="filter" global="false" />
 					<f:facet name="{Exportar}">
@@ -65,11 +65,11 @@
 						sortBy="#{item.id}" filterBy="#{item.id}" filterMatchMode="contains">
 						<p:outputLabel value="#{item.id}" />
 					</p:column>
-					<p:column headerText="PUESTO" sortBy="#{item.puesto.nombre}" filterBy="#{item.puesto.nombre}"
+					<p:column headerText="PUESTO" sortBy="#{item.puesto.nombre}" filterBy="#{item.puesto.nombre}" style="width: 200px"
 						filterMatchMode="contains">
 						<p:outputLabel value="#{item.puesto.nombre}" />
 					</p:column>
-					<p:column headerText="INTERESADO" style="width: 200px" sortBy="#{item.interesado.nombre}"
+					<p:column headerText="INTERESADO" style="width: 200px" sortBy="#{item.interesado.nombre}" 
 						filterBy="#{item.interesado.nombre}" filterMatchMode="contains">
 						<p:outputLabel value="#{item.interesado.nombre}" />
 					</p:column>
@@ -90,6 +90,20 @@
 						<p:outputLabel value="#{item.finalizacion}">
 							<f:convertDateTime timeZone="America/Buenos_Aires" type="date" pattern="dd/MM/yyyy" />
 						</p:outputLabel>
+					</p:column>
+					<p:column headerText="INGRESO" style="width: 150px" sortBy="#{item.fechaIngreso}"
+						filterBy="#{item.fechaIngreso}" filterMatchMode="contains">
+						<p:outputLabel value="#{item.fechaIngreso}">
+							<f:convertDateTime timeZone="America/Buenos_Aires" type="date" pattern="dd/MM/yyyy" />
+						</p:outputLabel>
+					</p:column>
+					<p:column headerText="EST.FORM." sortBy="#{item.estudiosFormalesStr}" filterBy="#{item.estudiosFormalesStr}"
+						filterMatchMode="contains"  style="width: 500px">
+						<p:outputLabel value="#{item.estudiosFormalesStr}" />
+					</p:column>
+					<p:column headerText="EST_NO_FORM" sortBy="#{item.estudiosNoFormalesStr}" filterBy="#{item.estudiosNoFormalesStr}"
+						filterMatchMode="contains" style="width: 300px">
+						<p:outputLabel value="#{item.estudiosNoFormalesStr}" />
 					</p:column>
 					<p:column headerText="Q" style="width: 70px" sortBy="#{item.cantidadPuestos}"
 						filterBy="#{item.cantidadPuestos}" filterMatchMode="contains">

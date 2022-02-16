@@ -8,10 +8,6 @@ import static com.github.adminfaces.template.util.Assert.has;
 import static com.gt.toolbox.spb.webapps.commons.infra.utils.Utils.addDetailMessage;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
@@ -57,10 +53,6 @@ public class PersonaEditController implements Serializable {
 
 	@Getter
 	@Setter
-	List<String> aptitudesList = new ArrayList<String>();
-	
-	@Getter
-	@Setter
 	DocumentableHelper documentableHelper;
 
 	public void init() {
@@ -78,11 +70,8 @@ public class PersonaEditController implements Serializable {
 
 		persona.getDocumentos().size();
 
-		documentableHelper = new DocumentableHelper(persona, documentoService.getRepo().nextCodigo());
-
-		if (persona.getAptitudes() != null && !persona.getAptitudes().isEmpty()) {
-			aptitudesList.addAll(Arrays.asList(persona.getAptitudes().split(",")));
-		}
+		documentableHelper = DocumentableHelper.builder().documentable(persona)
+				.nextCodigo(documentoService.getRepo().nextCodigo()).build();
 	}
 
 	private void setDefaultValues(Persona persona) {
@@ -97,10 +86,6 @@ public class PersonaEditController implements Serializable {
 		Severity severity = FacesMessage.SEVERITY_INFO;
 
 		try {
-
-			persona.setAptitudes(aptitudesList.stream().filter(a -> a != null && !a.trim().isEmpty())
-					.map(a -> a.toUpperCase()).sorted()
-					.collect(Collectors.joining(", ")));
 
 			personaService.save(persona, documentableHelper.getDocumentosEliminados());
 

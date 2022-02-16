@@ -28,7 +28,7 @@
 
 				<div class="ui-g ui-fluid">
 					<ui:fragment rendered="#{usuarioService.inRole('SYSADMIN')}">
-						<div class="ui-g-12 ui-md-4">
+						<div class="ui-g-12 ui-md-2">
 							<div class="ui-sm-12 ui-g-12">
 								<p:outputLabel value="ID" />
 							</div>
@@ -37,7 +37,7 @@
 							</div>
 						</div>
 					</ui:fragment>
-					<div class="ui-g-12 ui-md-3">
+					<div class="ui-g-12 ui-md-2">
 						<div class="ui-sm-12 ui-g-12">
 							<p:outputLabel for="codigo" value="CODIGO" />
 						</div>
@@ -47,13 +47,36 @@
 							<p:tooltip for="codigo" value="Valor de codigo" position="top" />
 						</div>
 					</div>
-					<div class="ui-g-12 ui-md-6">
+					<div class="ui-g-12 ui-md-4">
 						<div class="ui-sm-12 ui-g-12">
 							<p:outputLabel for="nombre" value="NOMBRE" />
 						</div>
 						<div class="ui-sm-12 ui-g-12">
 							<p:inputText id="nombre" value="#{puestoEditController.puesto.nombre}" />
 							<p:tooltip for="nombre" value="Valor de nombre" position="top" />
+						</div>
+					</div>
+					<div class="ui-g-12 ui-md-4">
+						<div class="ui-sm-12 ui-g-12">
+							<p:outputLabel for="sector" value="SECTOR" />
+						</div>
+						<div class="ui-sm-12 ui-g-12">
+							<p:inputText id="sector" value="#{puestoEditController.puesto.sector}" />
+							<p:tooltip for="sector" value="Valor de sector" position="top" />
+						</div>
+					</div>
+					<div class="ui-g-12 ui-md-4">
+						<div class="ui-sm-12 ui-g-12">
+							<p:outputLabel for="puestoSuperior" value="PUESTO SUPERIOR" />
+						</div>
+						<div class="ui-sm-12 ui-g-12">
+							<p:selectOneMenu id="puestoSuperior" value="#{puestoEditController.puesto.puestoSuperior}"
+								style="width:100%" filter="true" filterMatchMode="contains" styleClass="selectOneMenu">
+								<f:selectItem itemLabel="Seleccione una opcion" itemValue="#{null}" />
+								<f:selectItems value="#{puestoRepo.findAll()}" var="item" itemLabel="#{item.etiqueta}"
+									itemValue="#{item}" />
+							</p:selectOneMenu>
+							<p:tooltip for="puestoSuperior" value="Valor de puestoSuperior" position="top" />
 						</div>
 					</div>
 					<div class="ui-g-12 ui-md-12">
@@ -71,7 +94,7 @@
 						</div>
 						<div class="ui-sm-12 ui-g-12">
 							<p:chips id="aptitudesRequeridas" addOnPaste="true" separator=","
-								value="#{puestoEditController.aptitudesRequeridasList}" />
+								value="#{puestoEditController.puesto.aptitudesRequeridas}" />
 						</div>
 					</div>
 					<div class="ui-g-12 ui-md-12">
@@ -80,7 +103,7 @@
 						</div>
 						<div class="ui-sm-12 ui-g-12">
 							<p:chips id="aptitudesDeseadas" addOnPaste="true" separator=","
-								value="#{puestoEditController.aptitudesDeseadasList}" />
+								value="#{puestoEditController.puesto.aptitudesDeseadas}" />
 						</div>
 					</div>
 					<div class="ui-g-12 ui-md-12">

@@ -1,0 +1,107 @@
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui"
+    xmlns:adm="http://github.com/adminfaces">
+    <p:menubar>
+        <p:menuitem value="Nueva Evaluacion" icon="fa fa-plus"
+            action="#{requerimientoDePersonalEditController.crearEvaluacion}" update="evaluacionDatatable">
+        </p:menuitem>
+    </p:menubar>
+
+    <p:dataTable id="evaluacionDatatable" value="#{requerimientoDePersonalEditController.evaluaciones}"
+        widgetVar="evaluacionTable" var="item" size="small"
+        paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+        currentPageReportTemplate="{totalRecords} [ {currentPage} / {totalPages} ]"
+        emptyMessage="No se encontraron elementos" paginator="true" multiViewState="true" sortMode="multiple" rows="20"
+        rowsPerPageTemplate="20,50,100" lazy="true" reflow="true" style="width:100%">
+
+        <p:ajax event="filter" global="false" />
+        <p:ajax event="rowToggle" global="false"
+            listener="#{requerimientoDePersonalEditController.onEvaluacionesTableRowToggle}" />
+
+        <p:column style="width:2rem">
+            <p:rowToggler />
+        </p:column>
+        <p:column style="width:5rem">
+            <p:commandButton actionListener="#{requerimientoDePersonalEditController.borrarEvaluacion(item)}"
+                update="evaluacionDatatable" class="btn btn-danger btn-xs" icon="fa fa-fw fa fa-trash-o"
+                title="Eliminar">
+                <p:confirm header="Eliminar Evaluacion" message="¿Está seguro de eliminar la entidad?"
+                    icon="ui-icon-alert" />
+            </p:commandButton>
+        </p:column>
+        <p:column headerText="PERSONA" sortBy="#{item.persona.nombre}" filterBy="#{item.persona.nombre}"
+            filterMatchMode="contains">
+            <p:outputLabel value="#{item.persona.nombre}" />
+        </p:column>
+        <p:column headerText="ESTADO" sortBy="#{item.estado}" filterBy="#{item.estado}" filterMatchMode="contains">
+            <p:outputLabel value="#{item.estado}" />
+        </p:column>
+        <p:column headerText="F.ENTREV" style="width: 110px" sortBy="#{item.fechaEntrevista}"
+            filterBy="#{item.fechaEntrevista}" filterMatchMode="contains">
+            <p:outputLabel value="#{item.fechaEntrevista}">
+                <f:convertDateTime timeZone="America/Buenos_Aires" type="date" pattern="dd/MM/yyyy" />
+            </p:outputLabel>
+        </p:column>
+        <p:column headerText="PUNT" style="width: 80px" sortBy="#{item.puntaje}" filterBy="#{item.puntaje}"
+            filterMatchMode="contains">
+            <p:outputLabel value="#{item.puntaje}" />
+        </p:column>
+        <p:rowExpansion>
+            <div class="ui-g ui-fluid">
+                <div class="ui-md-1">
+                </div>
+                <div class="ui-md-11">
+                    <div class="ui-g-12 ui-md-5">
+                        <p:selectOneMenu value="#{item.persona}" style="width:100%" filter="true"
+                            filterMatchMode="contains" styleClass="selectOneMenu">
+                            <f:selectItem itemLabel="Seleccione una opcion" itemValue="#{null}" />
+                            <f:selectItems value="#{personaRepo.findAll()}" var="personaItem"
+                                itemLabel="#{personaItem.etiqueta}" itemValue="#{personaItem}" />
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="ui-g-12 ui-md-5">
+                        <p:selectOneMenu value="#{item.estado}" style="width:100%" filter="true"
+                            filterMatchMode="contains" styleClass="selectOneMenu">
+                            <f:selectItem itemLabel="Seleccione una opcion" itemValue="#{null}" />
+                            <f:selectItems value="#{enumsComponent.estadoEvaluacion}" var="estadoItem"
+                                itemLabel="#{estadoItem}" itemValue="#{estadoItem}" />
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="ui-g-12 ui-md-1">
+                        <p:datePicker value="#{item.fechaEntrevista}" locale="es" navigator="true" pattern="dd/MM/yyyy"
+                            showOn="button">
+                        </p:datePicker>
+                    </div>
+                    <div class="ui-g-12 ui-md-1">
+                        <p:inputNumber value="#{item.puntaje}" thousandSeparator="" decimalPlaces="0" />
+                        <p:tooltip for="cantidadPuestos" value="Valor de cantidadPuestos" position="top" />
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-md-12">
+                    <p:tabView>
+                        <p:tab title="Documentos Evaluacion">
+                            <ui:include src="EditDocumentosFragment.xhtml">
+                                <ui:param name="documentableHelper"
+                                    value="#{requerimientoDePersonalEditController.evaluacionDocumentableHelper}" />
+                                <ui:param name="idPrefix" value="docEval" />
+                            </ui:include>
+                        </p:tab>
+                        <p:tab title="Documentos Persona">
+                            <ui:include src="EditDocumentosFragment.xhtml">
+                                <ui:param name="documentableHelper"
+                                    value="#{requerimientoDePersonalEditController.personaDocumentableHelper}" />
+                                <ui:param name="idPrefix" value="docPersonaEval" />
+                            </ui:include>
+                        </p:tab>
+                    </p:tabView>
+                </div>
+                <div class="ui-sm-4 ui-g-2">
+                    <p:commandButton value="Cerrar"
+                        actionListener="#{requerimientoDePersonalEditController.finalizaEdicionEvaluacion(item)}"
+                        global="false" style="font-size: 90%;" update="evaluacionDatatable" />
+                </div>
+            </div>
+        </p:rowExpansion>
+
+    </p:dataTable>
+</ui:fragment>

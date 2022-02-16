@@ -99,13 +99,27 @@
 						</div>
 						<div class="ui-sm-12 ui-g-12">
 							<p:selectOneMenu id="localidad" value="#{personaEditController.persona.localidad}"
-								style="width:100%" filter="true" filterMatchMode="contains" converter="entityConverter"
+								style="width:100%" filter="true" filterMatchMode="contains"
 								styleClass="selectOneMenu">
 								<f:selectItem itemLabel="Seleccione una opcion" itemValue="#{null}" />
 								<f:selectItems value="#{localidadRepo.findAll()}" var="item"
 									itemLabel="#{item.etiqueta}" itemValue="#{item}" />
 							</p:selectOneMenu>
 							<p:tooltip for="localidad" value="Valor de localidad" position="top" />
+						</div>
+					</div>
+					<div class="ui-g-12 ui-md-4">
+						<div class="ui-sm-12 ui-g-12">
+							<p:outputLabel for="puesto" value="PUESTO" />
+						</div>
+						<div class="ui-sm-12 ui-g-12">
+							<p:selectOneMenu id="puesto" value="#{personaEditController.persona.puestoActual}"
+								style="width:100%" filter="true" filterMatchMode="contains" styleClass="selectOneMenu">
+								<f:selectItem itemLabel="Seleccione una opcion" itemValue="#{null}" />
+								<f:selectItems value="#{puestoRepo.findAll()}" var="item" itemLabel="#{item.etiqueta}"
+									itemValue="#{item}" />
+							</p:selectOneMenu>
+							<p:tooltip for="puesto" value="Valor de puesto" position="top" />
 						</div>
 					</div>
 					<div class="ui-g-12 ui-md-12">
@@ -128,11 +142,38 @@
 					</div>
 					<div class="ui-g-12 ui-md-12">
 						<div class="ui-sm-12 ui-g-12">
+							<p:outputLabel for="estudiosFormales" value="ESTUDIOS FORMALES" />
+						</div>
+						<div class="ui-sm-12 ui-g-12">
+							<p:chips id="estudiosFormales" addOnPaste="true" separator=","
+								value="#{personaEditController.persona.estudiosFormales}" />
+						</div>
+					</div>
+					<div class="ui-g-12 ui-md-12">
+						<div class="ui-sm-12 ui-g-12">
+							<p:outputLabel for="estudiosNoFormales" value="ESTUDIOS NO FORMALES" />
+						</div>
+						<div class="ui-sm-12 ui-g-12">
+							<p:chips id="estudiosNoFormales" addOnPaste="true" separator=","
+								value="#{personaEditController.persona.estudiosNoFormales}" />
+						</div>
+					</div>
+					<div class="ui-g-12 ui-md-12">
+						<div class="ui-sm-12 ui-g-12">
+							<p:outputLabel for="idiomas" value="IDIOMAS" />
+						</div>
+						<div class="ui-sm-12 ui-g-12">
+							<p:chips id="idiomas" addOnPaste="true" separator=","
+								value="#{personaEditController.persona.idiomas}" />
+						</div>
+					</div>
+					<div class="ui-g-12 ui-md-12">
+						<div class="ui-sm-12 ui-g-12">
 							<p:outputLabel for="aptitudes" value="APTITUDES" />
 						</div>
 						<div class="ui-sm-12 ui-g-12">
 							<p:chips id="aptitudes" addOnPaste="true" separator=","
-								value="#{personaEditController.aptitudesList}" />
+								value="#{personaEditController.persona.aptitudes}" />
 						</div>
 					</div>
 					<div class="ui-g-12 ui-md-12">
@@ -140,7 +181,8 @@
 							<div class="ui-g-12 ui-md-12">
 								<div class="ui-sm-12 ui-g-12">
 									<ui:include src="EditDocumentosFragment.xhtml">
-										<ui:param name="documentableHelper" value="#{personaEditController.documentableHelper}" />
+										<ui:param name="documentableHelper"
+											value="#{personaEditController.documentableHelper}" />
 									</ui:include>
 								</div>
 							</div>

@@ -8,10 +8,6 @@ import static com.github.adminfaces.template.util.Assert.has;
 import static com.gt.toolbox.spb.webapps.commons.infra.utils.Utils.addDetailMessage;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
@@ -48,14 +44,6 @@ public class PuestoEditController implements Serializable {
 	@Setter
 	Puesto puesto;
 
-	@Getter
-	@Setter
-	List<String> aptitudesRequeridasList = new ArrayList<String>();
-
-	@Getter
-	@Setter
-	List<String> aptitudesDeseadasList = new ArrayList<String>();
-
 	public void init() {
 		if (Faces.isAjaxRequest()) {
 			return;
@@ -69,13 +57,6 @@ public class PuestoEditController implements Serializable {
 			setDefaultValues(puesto);
 		}
 
-		if (puesto.getAptitudesRequeridas() != null && !puesto.getAptitudesRequeridas().isEmpty()) {
-			aptitudesRequeridasList.addAll(Arrays.asList(puesto.getAptitudesRequeridas().split(",")));
-		}
-
-		if (puesto.getAptitudesDeseadas() != null && !puesto.getAptitudesDeseadas().isEmpty()) {
-			aptitudesDeseadasList.addAll(Arrays.asList(puesto.getAptitudesDeseadas().split(",")));
-		}
 	}
 
 	private void setDefaultValues(Puesto puesto) {
@@ -90,14 +71,6 @@ public class PuestoEditController implements Serializable {
 		Severity severity = FacesMessage.SEVERITY_INFO;
 
 		try {
-
-			puesto.setAptitudesRequeridas(aptitudesRequeridasList.stream().filter(a -> a != null && !a.trim().isEmpty())
-					.map(a -> a.toUpperCase()).sorted()
-					.collect(Collectors.joining(", ")));
-
-			puesto.setAptitudesDeseadas(aptitudesDeseadasList.stream().filter(a -> a != null && !a.trim().isEmpty())
-					.map(a -> a.toUpperCase()).sorted()
-					.collect(Collectors.joining(", ")));
 
 			puestoService.save(puesto);
 

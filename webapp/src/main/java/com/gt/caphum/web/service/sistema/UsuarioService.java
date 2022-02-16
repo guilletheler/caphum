@@ -122,4 +122,8 @@ public class UsuarioService implements LazyDMFiller<Usuario> {
 				.flatMap(rol -> UserRol.getContainedRoles(rol).stream()).collect(Collectors.toSet());
 		return userEffectiveRoleList;
 	}
+
+	public List<Usuario> findUsuariosInteresados() {
+		return repo.findByRoles(UserRol.INTERESADO);
+	}
 }

@@ -35,7 +35,7 @@
 					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exportar}"
 					currentPageReportTemplate="{totalRecords} [ {currentPage} / {totalPages} ]"
 					emptyMessage="No se encontraron elementos" paginator="true" multiViewState="true"
-					sortMode="multiple" sortBy="#{puestoListController.defaultSortBy}" rows="20"
+					sortMode="multiple" sortBy="#{puestoListController.defaultSortBy}" rows="20"  
 					rowsPerPageTemplate="20,50,100" lazy="true" reflow="true" style="width:100%">
 
 					<p:ajax event="filter" global="false" />
@@ -73,13 +73,21 @@
 						filterMatchMode="contains">
 						<p:outputLabel value="#{item.nombre}" />
 					</p:column>
-					<p:column headerText="APT REQ" sortBy="#{item.aptitudesRequeridas}"
-						filterBy="#{item.aptitudesRequeridas}" filterMatchMode="contains">
-						<p:outputLabel value="#{item.aptitudesRequeridas}" />
+					<p:column headerText="SECTOR" sortBy="#{item.sector}" filterBy="#{item.sector}"
+						filterMatchMode="contains">
+						<p:outputLabel value="#{item.sector}" />
 					</p:column>
-					<p:column headerText="APT DES" sortBy="#{item.aptitudesDeseadas}"
-						filterBy="#{item.aptitudesDeseadas}" filterMatchMode="contains">
-						<p:outputLabel value="#{item.aptitudesDeseadas}" />
+					<p:column headerText="SUPERIOR" sortBy="#{item.puestoSuperior.nombre}" filterBy="#{item.puestoSuperior.nombre}"
+						filterMatchMode="contains">
+						<p:outputLabel value="#{item.puestoSuperior.nombre}" />
+					</p:column>
+					<p:column headerText="APT REQ" sortBy="#{item.aptitudesRequeridasStr}"
+						filterBy="#{item.aptitudesRequeridasStr}" filterMatchMode="contains">
+						<p:outputLabel value="#{item.aptitudesRequeridasStr}" />
+					</p:column>
+					<p:column headerText="APT DES" sortBy="#{item.aptitudesDeseadasStr}"
+						filterBy="#{item.aptitudesDeseadasStr}" filterMatchMode="contains">
+						<p:outputLabel value="#{item.aptitudesDeseadasStr}" />
 					</p:column>
 
 				</p:dataTable>

@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 import com.gt.toolbox.spb.webapps.commons.infra.model.IWithIntegerId;
 import com.gt.toolbox.spb.webapps.commons.infra.model.IWithObservaciones;
@@ -45,11 +46,14 @@ public class Evaluacion implements Documentable, IWithIntegerId, IWithObservacio
     private Short puntaje;
 
     @ManyToOne
+    @NotNull
     private RequerimientoDePersonal requerimientoDePersonal;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     private EstadoEvaluacion estado;
 
+    @NotNull
     @ManyToOne
     private Persona persona;
 
